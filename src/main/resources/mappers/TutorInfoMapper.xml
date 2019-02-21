@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylfq5.online.tutor.dao.TutorInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.aylfq5.online.tutor.domain.TutorInfo" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="professional_title" property="professionalTitle" jdbcType="VARCHAR" />
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    <result column="selected_numbers" property="selectedNumbers" jdbcType="TINYINT" />
+    <result column="expected_numbers" property="expectedNumbers" jdbcType="TINYINT" />
+    <result column="research_direction" property="researchDirection" jdbcType="VARCHAR" />
+    <result column="primary_course" property="primaryCourse" jdbcType="VARCHAR" />
+    <result column="office" property="office" jdbcType="VARCHAR" />
+    <result column="student_request" property="studentRequest" jdbcType="VARCHAR" />
+    <result column="teaching_and_research_achievements" property="teachingAndResearchAchievements" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, professional_title, avatar, selected_numbers, expected_numbers, research_direction, 
+    primary_course, office, student_request, teaching_and_research_achievements, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tutor_info
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tutor_info
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.TutorInfo" >
+    insert into tutor_info (user_id, professional_title, avatar, 
+      selected_numbers, expected_numbers, research_direction, 
+      primary_course, office, student_request, 
+      teaching_and_research_achievements, create_time, 
+      update_time)
+    values (#{userId,jdbcType=INTEGER}, #{professionalTitle,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
+      #{selectedNumbers,jdbcType=TINYINT}, #{expectedNumbers,jdbcType=TINYINT}, #{researchDirection,jdbcType=VARCHAR}, 
+      #{primaryCourse,jdbcType=VARCHAR}, #{office,jdbcType=VARCHAR}, #{studentRequest,jdbcType=VARCHAR}, 
+      #{teachingAndResearchAchievements,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aylfq5.online.tutor.domain.TutorInfo" >
+    insert into tutor_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="professionalTitle != null" >
+        professional_title,
+      </if>
+      <if test="avatar != null" >
+        avatar,
+      </if>
+      <if test="selectedNumbers != null" >
+        selected_numbers,
+      </if>
+      <if test="expectedNumbers != null" >
+        expected_numbers,
+      </if>
+      <if test="researchDirection != null" >
+        research_direction,
+      </if>
+      <if test="primaryCourse != null" >
+        primary_course,
+      </if>
+      <if test="office != null" >
+        office,
+      </if>
+      <if test="studentRequest != null" >
+        student_request,
+      </if>
+      <if test="teachingAndResearchAchievements != null" >
+        teaching_and_research_achievements,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="professionalTitle != null" >
+        #{professionalTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null" >
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="selectedNumbers != null" >
+        #{selectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="expectedNumbers != null" >
+        #{expectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="researchDirection != null" >
+        #{researchDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="primaryCourse != null" >
+        #{primaryCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="office != null" >
+        #{office,jdbcType=VARCHAR},
+      </if>
+      <if test="studentRequest != null" >
+        #{studentRequest,jdbcType=VARCHAR},
+      </if>
+      <if test="teachingAndResearchAchievements != null" >
+        #{teachingAndResearchAchievements,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aylfq5.online.tutor.domain.TutorInfo" >
+    update tutor_info
+    <set >
+      <if test="professionalTitle != null" >
+        professional_title = #{professionalTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null" >
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="selectedNumbers != null" >
+        selected_numbers = #{selectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="expectedNumbers != null" >
+        expected_numbers = #{expectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="researchDirection != null" >
+        research_direction = #{researchDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="primaryCourse != null" >
+        primary_course = #{primaryCourse,jdbcType=VARCHAR},
+      </if>
+      <if test="office != null" >
+        office = #{office,jdbcType=VARCHAR},
+      </if>
+      <if test="studentRequest != null" >
+        student_request = #{studentRequest,jdbcType=VARCHAR},
+      </if>
+      <if test="teachingAndResearchAchievements != null" >
+        teaching_and_research_achievements = #{teachingAndResearchAchievements,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aylfq5.online.tutor.domain.TutorInfo" >
+    update tutor_info
+    set professional_title = #{professionalTitle,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      selected_numbers = #{selectedNumbers,jdbcType=TINYINT},
+      expected_numbers = #{expectedNumbers,jdbcType=TINYINT},
+      research_direction = #{researchDirection,jdbcType=VARCHAR},
+      primary_course = #{primaryCourse,jdbcType=VARCHAR},
+      office = #{office,jdbcType=VARCHAR},
+      student_request = #{studentRequest,jdbcType=VARCHAR},
+      teaching_and_research_achievements = #{teachingAndResearchAchievements,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>
