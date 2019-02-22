@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.aylfq5.online.tutor.dao.StudentInfoMapper" >
   <resultMap id="BaseResultMap" type="com.aylfq5.online.tutor.domain.StudentInfo" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="professional_direction" property="professionalDirection" jdbcType="VARCHAR" />
     <result column="specialties" property="specialties" jdbcType="VARCHAR" />
     <result column="tutor_expectation" property="tutorExpectation" jdbcType="VARCHAR" />
@@ -14,21 +14,21 @@
     id, professional_direction, specialties, tutor_expectation, volunteer_sequence, create_time, 
     update_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from student_info
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from student_info
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.StudentInfo" >
     insert into student_info (id, professional_direction, specialties, 
       tutor_expectation, volunteer_sequence, create_time, 
       update_time)
-    values (#{id,jdbcType=INTEGER}, #{professionalDirection,jdbcType=VARCHAR}, #{specialties,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{professionalDirection,jdbcType=VARCHAR}, #{specialties,jdbcType=VARCHAR}, 
       #{tutorExpectation,jdbcType=VARCHAR}, #{volunteerSequence,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -59,7 +59,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="professionalDirection != null" >
         #{professionalDirection,jdbcType=VARCHAR},
@@ -103,7 +103,7 @@
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.aylfq5.online.tutor.domain.StudentInfo" >
     update student_info
@@ -113,6 +113,6 @@
       volunteer_sequence = #{volunteerSequence,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -9,13 +9,13 @@ import com.aylfq5.online.tutor.domain.User;
  * @Version: 1.0
  */
 public interface UserService {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(User record);
 
     int insertSelective(User record);
 
-    User selectByPrimaryKey(Integer id);
+    User selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(User record);
 

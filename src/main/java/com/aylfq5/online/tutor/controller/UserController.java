@@ -24,11 +24,15 @@ public class UserController {
 
     @RequestMapping("/showUser")
     public String toIndex(HttpServletRequest request, Model model){
-        int userId = Integer.parseInt(request.getParameter("id"));
+        Long userId = Long.parseLong(request.getParameter("id"));
         System.out.println(userId);
         User user = this.userService.selectByPrimaryKey(userId);
         model.addAttribute("users",user);
         return "/user/list";
     }
 
+    @RequestMapping("/toLogin")
+    public String toLogin(){
+        return "/user/login";
+    }
 }

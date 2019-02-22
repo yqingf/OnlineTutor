@@ -3,38 +3,45 @@ package com.aylfq5.online.tutor.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+* @Description:    用户实体
+* @Author:         aylfq5
+* @CreateDate:     2019/2/22 9:21
+* @Version:        1.0
+*/
 public class User implements Serializable {
-    private Integer id;
-
+    /**ID*/
+    private Long id;
+    /**姓名*/
     private String name;
-
+    /**性别:1-男, 2-女*/
     private Boolean gender;
-
+    /**学号/教师号*/
     private String number;
-
+    /**密码*/
     private String password;
-
-    private Boolean userType;
-
+    /**用户类型:1-学生, 2-导师, 3-管理员*/
+    private Integer userType;
+    /**手机号*/
     private String cellphone;
-
+    /**QQ*/
     private String qq;
-
+    /**电子邮箱*/
     private String email;
-
+    /**个人简介*/
     private String personalProfile;
-
+    /**创建时间*/
     private Date createTime;
-
+    /**修改时间*/
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -70,11 +77,11 @@ public class User implements Serializable {
         this.password = password == null ? null : password.trim();
     }
 
-    public Boolean getUserType() {
+    public Integer getUserType() {
         return userType;
     }
 
-    public void setUserType(Boolean userType) {
+    public void setUserType(Integer userType) {
         this.userType = userType;
     }
 

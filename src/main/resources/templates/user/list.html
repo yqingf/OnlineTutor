@@ -8,7 +8,7 @@
 <h2>用户列表</h2>
 <div>
     <ul>
-        <li  th:each="user:${users}">
+        <li th:each="user:${users}">
             <span th:text="${user.id}"></span>-
             <span th:text="${user.name}"></span>-
             <span th:text="${user.password}"></span>-

@@ -2,40 +2,47 @@ package com.aylfq5.online.tutor.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-
+/**
+* @Description:    导师信息实体
+* @Author:         aylfq5
+* @CreateDate:     2019/2/22 9:32
+* @Version:        1.0
+*/
 public class TutorInfo implements Serializable {
-    private Integer userId;
 
+    /**导师ID*/
+    private Long id;
+    /**职称*/
     private String professionalTitle;
-
+    /**头像*/
     private String avatar;
-
-    private Byte selectedNumbers;
-
-    private Byte expectedNumbers;
-
+    /**已选人数*/
+    private Integer selectedNumbers;
+    /**预带人数*/
+    private Integer expectedNumbers;
+    /**研究方向*/
     private String researchDirection;
-
+    /**主讲课程*/
     private String primaryCourse;
-
+    /**办公室*/
     private String office;
-
+    /**学生要求*/
     private String studentRequest;
-
+    /**教研成果*/
     private String teachingAndResearchAchievements;
-
+    /**创建时间*/
     private Date createTime;
-
+    /**修改时间*/
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getProfessionalTitle() {
@@ -54,19 +61,19 @@ public class TutorInfo implements Serializable {
         this.avatar = avatar == null ? null : avatar.trim();
     }
 
-    public Byte getSelectedNumbers() {
+    public Integer getSelectedNumbers() {
         return selectedNumbers;
     }
 
-    public void setSelectedNumbers(Byte selectedNumbers) {
+    public void setSelectedNumbers(Integer selectedNumbers) {
         this.selectedNumbers = selectedNumbers;
     }
 
-    public Byte getExpectedNumbers() {
+    public Integer getExpectedNumbers() {
         return expectedNumbers;
     }
 
-    public void setExpectedNumbers(Byte expectedNumbers) {
+    public void setExpectedNumbers(Integer expectedNumbers) {
         this.expectedNumbers = expectedNumbers;
     }
 

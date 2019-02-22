@@ -3,28 +3,36 @@ package com.aylfq5.online.tutor.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+* @Description:    学生信息实体
+* @Author:         aylfq5
+* @CreateDate:     2019/2/22 9:32
+* @Version:        1.0
+*/
 public class StudentInfo implements Serializable {
-    private Integer id;
 
+    /**学生ID*/
+    private Long id;
+    /**专业方向*/
     private String professionalDirection;
-
+    /**专业特长*/
     private String specialties;
-
+    /**导师期望*/
     private String tutorExpectation;
-
+    /**志愿序列*/
     private Long volunteerSequence;
-
+    /**创建时间*/
     private Date createTime;
-
+    /**修改时间*/
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

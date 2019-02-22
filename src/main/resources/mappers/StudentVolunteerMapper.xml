@@ -2,33 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.aylfq5.online.tutor.dao.StudentVolunteerMapper" >
   <resultMap id="BaseResultMap" type="com.aylfq5.online.tutor.domain.StudentVolunteer" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="student_id" property="studentId" jdbcType="INTEGER" />
-    <result column="tutor_id" property="tutorId" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="student_id" property="studentId" jdbcType="BIGINT" />
+    <result column="tutor_id" property="tutorId" jdbcType="BIGINT" />
     <result column="volunteer_level" property="volunteerLevel" jdbcType="BIT" />
+    <result column="volunteer_status" property="volunteerStatus" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, student_id, tutor_id, volunteer_level, create_time, update_time
+    id, student_id, tutor_id, volunteer_level, volunteer_status, create_time, update_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from student_volunteer
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from student_volunteer
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.StudentVolunteer" >
     insert into student_volunteer (id, student_id, tutor_id, 
-      volunteer_level, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{tutorId,jdbcType=INTEGER}, 
-      #{volunteerLevel,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      volunteer_level, volunteer_status, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, #{tutorId,jdbcType=BIGINT}, 
+      #{volunteerLevel,jdbcType=BIT}, #{volunteerStatus,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.aylfq5.online.tutor.domain.StudentVolunteer" >
     insert into student_volunteer
@@ -45,6 +46,9 @@
       <if test="volunteerLevel != null" >
         volunteer_level,
       </if>
+      <if test="volunteerStatus != null" >
+        volunteer_status,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
@@ -54,16 +58,19 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="studentId != null" >
-        #{studentId,jdbcType=INTEGER},
+        #{studentId,jdbcType=BIGINT},
       </if>
       <if test="tutorId != null" >
-        #{tutorId,jdbcType=INTEGER},
+        #{tutorId,jdbcType=BIGINT},
       </if>
       <if test="volunteerLevel != null" >
         #{volunteerLevel,jdbcType=BIT},
+      </if>
+      <if test="volunteerStatus != null" >
+        #{volunteerStatus,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -77,13 +84,16 @@
     update student_volunteer
     <set >
       <if test="studentId != null" >
-        student_id = #{studentId,jdbcType=INTEGER},
+        student_id = #{studentId,jdbcType=BIGINT},
       </if>
       <if test="tutorId != null" >
-        tutor_id = #{tutorId,jdbcType=INTEGER},
+        tutor_id = #{tutorId,jdbcType=BIGINT},
       </if>
       <if test="volunteerLevel != null" >
         volunteer_level = #{volunteerLevel,jdbcType=BIT},
+      </if>
+      <if test="volunteerStatus != null" >
+        volunteer_status = #{volunteerStatus,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -92,15 +102,16 @@
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.aylfq5.online.tutor.domain.StudentVolunteer" >
     update student_volunteer
-    set student_id = #{studentId,jdbcType=INTEGER},
-      tutor_id = #{tutorId,jdbcType=INTEGER},
+    set student_id = #{studentId,jdbcType=BIGINT},
+      tutor_id = #{tutorId,jdbcType=BIGINT},
       volunteer_level = #{volunteerLevel,jdbcType=BIT},
+      volunteer_status = #{volunteerStatus,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
