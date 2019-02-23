@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
     @Resource
     private UserService userService;
 
@@ -31,7 +32,7 @@ public class UserController {
         return "/user/list";
     }
 
-    @RequestMapping("/toLogin")
+    @RequestMapping("/toLogin.html")
     public String toLogin(){
         return "/user/login";
     }
