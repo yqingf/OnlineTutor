@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylfq5.online.tutor.dao.ExceptionLogMapper" >
+  <resultMap id="BaseResultMap" type="com.aylfq5.online.tutor.domain.ExceptionLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="exception_json" property="exceptionJson" jdbcType="VARCHAR" />
+    <result column="exception_message" property="exceptionMessage" jdbcType="VARCHAR" />
+    <result column="happen_time" property="happenTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, exception_json, exception_message, happen_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from exception_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from exception_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.ExceptionLog" >
+    insert into exception_log (id, exception_json, exception_message, 
+      happen_time)
+    values (#{id,jdbcType=BIGINT}, #{exceptionJson,jdbcType=VARCHAR}, #{exceptionMessage,jdbcType=VARCHAR}, 
+      #{happenTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aylfq5.online.tutor.domain.ExceptionLog" >
+    insert into exception_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="exceptionJson != null" >
+        exception_json,
+      </if>
+      <if test="exceptionMessage != null" >
+        exception_message,
+      </if>
+      <if test="happenTime != null" >
+        happen_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="exceptionJson != null" >
+        #{exceptionJson,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionMessage != null" >
+        #{exceptionMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="happenTime != null" >
+        #{happenTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aylfq5.online.tutor.domain.ExceptionLog" >
+    update exception_log
+    <set >
+      <if test="exceptionJson != null" >
+        exception_json = #{exceptionJson,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionMessage != null" >
+        exception_message = #{exceptionMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="happenTime != null" >
+        happen_time = #{happenTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aylfq5.online.tutor.domain.ExceptionLog" >
+    update exception_log
+    set exception_json = #{exceptionJson,jdbcType=VARCHAR},
+      exception_message = #{exceptionMessage,jdbcType=VARCHAR},
+      happen_time = #{happenTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

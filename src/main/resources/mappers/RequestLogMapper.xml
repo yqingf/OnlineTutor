@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aylfq5.online.tutor.dao.RequestLogMapper" >
+  <resultMap id="BaseResultMap" type="com.aylfq5.online.tutor.domain.RequestLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="way" property="way" jdbcType="VARCHAR" />
+    <result column="classpath" property="classpath" jdbcType="VARCHAR" />
+    <result column="method_name" property="methodName" jdbcType="VARCHAR" />
+    <result column="param" property="param" jdbcType="VARCHAR" />
+    <result column="operation" property="operation" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="finish_time" property="finishTime" jdbcType="BIGINT" />
+    <result column="return_time" property="returnTime" jdbcType="TIMESTAMP" />
+    <result column="return_data" property="returnData" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aylfq5.online.tutor.domain.RequestLog" extends="BaseResultMap" >
+    <result column="session_id" property="sessionId" jdbcType="VARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ip, url, type, way, classpath, method_name, param, operation, start_time, finish_time, 
+    return_time, return_data
+  </sql>
+  <sql id="Blob_Column_List" >
+    session_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from request_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from request_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.RequestLog" >
+    insert into request_log (id, ip, url, type, 
+      way, classpath, method_name, 
+      param, operation, start_time, 
+      finish_time, return_time, return_data, 
+      session_id)
+    values (#{id,jdbcType=BIGINT}, #{ip,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{way,jdbcType=VARCHAR}, #{classpath,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, 
+      #{param,jdbcType=VARCHAR}, #{operation,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{finishTime,jdbcType=BIGINT}, #{returnTime,jdbcType=TIMESTAMP}, #{returnData,jdbcType=VARCHAR}, 
+      #{sessionId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aylfq5.online.tutor.domain.RequestLog" >
+    insert into request_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="ip != null" >
+        ip,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="way != null" >
+        way,
+      </if>
+      <if test="classpath != null" >
+        classpath,
+      </if>
+      <if test="methodName != null" >
+        method_name,
+      </if>
+      <if test="param != null" >
+        param,
+      </if>
+      <if test="operation != null" >
+        operation,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="finishTime != null" >
+        finish_time,
+      </if>
+      <if test="returnTime != null" >
+        return_time,
+      </if>
+      <if test="returnData != null" >
+        return_data,
+      </if>
+      <if test="sessionId != null" >
+        session_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="way != null" >
+        #{way,jdbcType=VARCHAR},
+      </if>
+      <if test="classpath != null" >
+        #{classpath,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null" >
+        #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="param != null" >
+        #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishTime != null" >
+        #{finishTime,jdbcType=BIGINT},
+      </if>
+      <if test="returnTime != null" >
+        #{returnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnData != null" >
+        #{returnData,jdbcType=VARCHAR},
+      </if>
+      <if test="sessionId != null" >
+        #{sessionId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aylfq5.online.tutor.domain.RequestLog" >
+    update request_log
+    <set >
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="way != null" >
+        way = #{way,jdbcType=VARCHAR},
+      </if>
+      <if test="classpath != null" >
+        classpath = #{classpath,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null" >
+        method_name = #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="param != null" >
+        param = #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        operation = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishTime != null" >
+        finish_time = #{finishTime,jdbcType=BIGINT},
+      </if>
+      <if test="returnTime != null" >
+        return_time = #{returnTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="returnData != null" >
+        return_data = #{returnData,jdbcType=VARCHAR},
+      </if>
+      <if test="sessionId != null" >
+        session_id = #{sessionId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aylfq5.online.tutor.domain.RequestLog" >
+    update request_log
+    set ip = #{ip,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      way = #{way,jdbcType=VARCHAR},
+      classpath = #{classpath,jdbcType=VARCHAR},
+      method_name = #{methodName,jdbcType=VARCHAR},
+      param = #{param,jdbcType=VARCHAR},
+      operation = #{operation,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      finish_time = #{finishTime,jdbcType=BIGINT},
+      return_time = #{returnTime,jdbcType=TIMESTAMP},
+      return_data = #{returnData,jdbcType=VARCHAR},
+      session_id = #{sessionId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aylfq5.online.tutor.domain.RequestLog" >
+    update request_log
+    set ip = #{ip,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      way = #{way,jdbcType=VARCHAR},
+      classpath = #{classpath,jdbcType=VARCHAR},
+      method_name = #{methodName,jdbcType=VARCHAR},
+      param = #{param,jdbcType=VARCHAR},
+      operation = #{operation,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      finish_time = #{finishTime,jdbcType=BIGINT},
+      return_time = #{returnTime,jdbcType=TIMESTAMP},
+      return_data = #{returnData,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
