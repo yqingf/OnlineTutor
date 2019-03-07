@@ -2,6 +2,8 @@ package com.aylfq5.online.tutor.dao;
 
 import com.aylfq5.online.tutor.domain.User;
 
+import java.util.List;
+
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,13 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    User selectByNumber(String number);
+
+    /**
+     * 获取用户列表
+     * @param type
+     * @return
+     */
+    List<User> getUserList(int type);
 }

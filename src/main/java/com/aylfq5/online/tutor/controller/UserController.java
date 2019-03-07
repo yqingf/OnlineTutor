@@ -4,6 +4,7 @@ import com.aylfq5.online.tutor.domain.User;
 import com.aylfq5.online.tutor.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,6 +35,11 @@ public class UserController {
 
     @RequestMapping("/toLogin.html")
     public String toLogin(){
+        return "/user/login";
+    }
+    @RequestMapping("/login")
+    public String login(User user){
+        System.out.println(user);
         return "/user/login";
     }
 }

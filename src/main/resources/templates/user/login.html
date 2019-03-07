@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>登录</title>
 </head>
-<link href="../css/login.css" rel="stylesheet" rev="stylesheet" type="text/css" media="all" />
-<script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
-<script type="text/javascript" src="../js/jquery.SuperSlide.js"></script>
-<script type="text/javascript" src="../js/Validform_v5.3.2_min.js"></script>
+<link th:href="@{../css/login.css}" rel="stylesheet" rev="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" th:src="@{../js/jquery-1.8.2.min.js}"></script>
+<script type="text/javascript" th:src="@{../js/jquery.SuperSlide.js}"></script>
+<script type="text/javascript" th:src="@{../js/Validform_v5.3.2_min.js}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         var $tab_li = $('#tab ul li');
@@ -200,7 +200,7 @@
         <!-- 学生登录开始 -->
         <div>
             <div class="stu_error_box"></div>
-            <form action="" method="post" class="stu_login_error">
+            <form action="" method="post" class="stu_login_error" id="form">
                 <div id="username">
                     <label>学&nbsp;&nbsp;&nbsp;号：</label>
                     <input type="text" id="stu_username_hide" name="username" value="输入学号" nullmsg="学号不能为空！" datatype="s6-18" errormsg="学号范围在6~18个字符之间！" sucmsg="学号验证通过！"/>
@@ -219,7 +219,7 @@
                     <label>记住密码</label>
                 </div>
                 <div id="login">
-                    <button type="submit">登录</button>
+                    <button onclick="submitForm()">登录</button>
                 </div>
             </form>
         </div>
@@ -289,5 +289,14 @@
         <li><a href="javascript:;"><img src="../images/3.jpg"></a></li>
     </ul>
 </div>
+<script>
+
+    function submitForm() {
+        $.ajax({
+            url:"[[@{/user/login}]]",
+            data:{name:"123","password":"456"}
+        });
+    };
+</script>
 </body>
 </html>

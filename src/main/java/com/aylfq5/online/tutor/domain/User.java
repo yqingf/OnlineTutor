@@ -15,11 +15,15 @@ public class User implements Serializable {
     /**姓名*/
     private String name;
     /**性别:1-男, 2-女*/
-    private Boolean gender;
+    private Integer gender;
+    /**职称*/
+    private String professionalTitle;
     /**学号/教师号*/
     private String number;
     /**密码*/
     private String password;
+    /**确认密码*/
+    private String confirmPassword;
     /**用户类型:1-学生, 2-导师, 3-管理员*/
     private Integer userType;
     /**手机号*/
@@ -53,12 +57,20 @@ public class User implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public Boolean getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
+    }
+
+    public String getProfessionalTitle() {
+        return professionalTitle;
+    }
+
+    public void setProfessionalTitle(String professionalTitle) {
+        this.professionalTitle = professionalTitle;
     }
 
     public String getNumber() {
@@ -67,6 +79,14 @@ public class User implements Serializable {
 
     public void setNumber(String number) {
         this.number = number == null ? null : number.trim();
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getPassword() {

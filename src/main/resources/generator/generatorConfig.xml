@@ -51,12 +51,17 @@
 
 
         <!-- 列出要生成代码的所有表，这里配置的是不生成Example文件 -->
-        <table tableName="user" domainObjectName="User"
+        <!--<table tableName="request_log" domainObjectName="RequestLog"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+            <property name="useActualColumnNames" value="false"/>
+        </table>-->
+        <table tableName="exception_log" domainObjectName="ExceptionLog"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false" >
             <property name="useActualColumnNames" value="false"/>
         </table>
-        <table tableName="tutor_info" domainObjectName="TutorInfo"
+       <!-- <table tableName="tutor_info" domainObjectName="TutorInfo"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false" >
             <property name="useActualColumnNames" value="false"/>
@@ -70,6 +75,6 @@
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false" >
             <property name="useActualColumnNames" value="false"/>
-        </table>
+        </table>-->
     </context>
 </generatorConfiguration>

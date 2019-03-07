@@ -1,12 +1,22 @@
 package com.aylfq5.online.tutor.service.impl;
 
+import com.aylfq5.online.tutor.constant.UserType;
+import com.aylfq5.online.tutor.dao.StudentInfoMapper;
+import com.aylfq5.online.tutor.dao.TutorInfoMapper;
 import com.aylfq5.online.tutor.dao.UserMapper;
+import com.aylfq5.online.tutor.domain.StudentInfo;
+import com.aylfq5.online.tutor.domain.TutorInfo;
 import com.aylfq5.online.tutor.domain.User;
 import com.aylfq5.online.tutor.service.UserService;
+import com.aylfq5.online.tutor.util.IDUtils;
+import com.aylfq5.online.tutor.util.OnlineTutorResult;
+import com.aylfq5.online.tutor.util.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description:
@@ -18,15 +28,51 @@ import javax.annotation.Resource;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private TutorInfoMapper tutorInfoMapper;
+    @Resource
+    private StudentInfoMapper studentInfoMapper;
 
     @Override
     public int deleteByPrimaryKey(Long id) {
         return userMapper.deleteByPrimaryKey(id);
     }
 
+    @Operation("创建用户")
     @Override
-    public int insert(User record) {
-        return userMapper.insert(record);
+    public OnlineTutorResult insert(User record) {
+        // 用户ID
+        record.setId(IDUtils.genItemId());
+        // 判断该职工号/学号是否已存在
+        User user = userMapper.selectByNumber(record.getNumber());
+        if (user != null) {
+            return OnlineTutorResult.build(400,"该职工号/学号已存在!", 0);
+        }
+        // 密码和确认密码是否匹配
+        if (!record.getPassword().equals(record.getConfirmPassword())) {
+            return OnlineTutorResult.build(400, "密码和确认密码不一致!", 0);
+        }
+        // 对密码进行md5加密
+        String md5Password = DigestUtils.md5DigestAsHex(record.getPassword().getBytes());
+        record.setPassword(md5Password);
+        // 插入
+        userMapper.insert(record);
+        // 学生类型
+        if (UserType.ROLE_STUDENT == record.getUserType()) {
+            StudentInfo studentInfo = new StudentInfo();
+            studentInfo.setId(Long.parseLong(record.getNumber()));
+            // 添加学生信息
+            studentInfoMapper.insert(studentInfo);
+        }
+        // 导师类型
+        if (UserType.ROLE_TUTOR == record.getUserType()) {
+            TutorInfo tutorInfo = new TutorInfo();
+            tutorInfo.setId(Long.parseLong(record.getNumber()));
+            tutorInfo.setProfessionalTitle(record.getProfessionalTitle());
+            // 添加导师信息
+            tutorInfoMapper.insert(tutorInfo);
+        }
+        return OnlineTutorResult.build(200, "用户添加成功!", 0);
     }
 
     @Override
@@ -47,5 +93,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateByPrimaryKey(User record) {
         return userMapper.updateByPrimaryKey(record);
+    }
+
+    @Operation("获取用户列表")
+    @Override
+    public OnlineTutorResult getUserList(int type) {
+        List<User> userList = userMapper.getUserList(type);
+        if (userList.size() <= 0) {
+            return OnlineTutorResult.build(4001, "暂无数据!", 0);
+        }
+        return OnlineTutorResult.build(200, "请求成功!",userList.size(), userList);
     }
 }

@@ -1,6 +1,9 @@
 package com.aylfq5.online.tutor.service;
 
 import com.aylfq5.online.tutor.domain.User;
+import com.aylfq5.online.tutor.util.OnlineTutorResult;
+
+import java.util.List;
 
 /**
  * @Description:
@@ -11,7 +14,7 @@ import com.aylfq5.online.tutor.domain.User;
 public interface UserService {
     int deleteByPrimaryKey(Long id);
 
-    int insert(User record);
+    OnlineTutorResult insert(User record);
 
     int insertSelective(User record);
 
@@ -20,4 +23,11 @@ public interface UserService {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    /**
+     * 获取用户列表
+     * @param type 用户类型(1-学生, 2-导师, 3-管理员)
+     * @return
+     */
+    OnlineTutorResult getUserList(int type);
 }
