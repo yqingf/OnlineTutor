@@ -40,6 +40,10 @@ public class OnlineTutorResult {
         return new OnlineTutorResult(status, msg, count, data);
     }
 
+    public static OnlineTutorResult build(Integer status, String msg) {
+        return new OnlineTutorResult(status, msg);
+    }
+
     public static OnlineTutorResult ok(Object data) {
         return new OnlineTutorResult(data);
     }
@@ -61,6 +65,10 @@ public class OnlineTutorResult {
         this.msg = msg;
         this.count = count;
         this.data = data;
+    }
+
+    public OnlineTutorResult(Integer code, String msg) {
+        this(code, msg, null, null);
     }
 
     public OnlineTutorResult(Object data) {
@@ -106,7 +114,7 @@ public class OnlineTutorResult {
      * 将json结果集转化为TOnlineTutorResult对象
      *
      * @param jsonData json数据
-     * @param clazz OnlineTutorResult中的object类型
+     * @param clazz    OnlineTutorResult中的object类型
      * @return
      */
     public static OnlineTutorResult formatToPojo(String jsonData, Class<?> clazz) {
@@ -149,7 +157,7 @@ public class OnlineTutorResult {
      * Object是集合转化
      *
      * @param jsonData json数据
-     * @param clazz 集合中的类型
+     * @param clazz    集合中的类型
      * @return
      */
     public static OnlineTutorResult formatToList(String jsonData, Class<?> clazz) {

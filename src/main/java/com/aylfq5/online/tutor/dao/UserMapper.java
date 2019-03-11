@@ -1,6 +1,7 @@
 package com.aylfq5.online.tutor.dao;
 
 import com.aylfq5.online.tutor.domain.User;
+import com.aylfq5.online.tutor.exception.DataDoException;
 
 import java.util.List;
 
