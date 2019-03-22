@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="gender" property="gender" jdbcType="BIT" />
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
     <result column="number" property="number" jdbcType="CHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="user_type" property="userType" jdbcType="BIT" />
@@ -12,46 +13,126 @@
     <result column="qq" property="qq" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="personal_profile" property="personalProfile" jdbcType="VARCHAR" />
+    <result column="direction" property="direction" jdbcType="VARCHAR" />
+    <result column="specialties" property="specialties" jdbcType="VARCHAR" />
+    <result column="tutor_expectation" property="tutorExpectation" jdbcType="VARCHAR" />
+    <result column="professional_title" property="professionalTitle" jdbcType="VARCHAR" />
+    <result column="selected_numbers" property="selectedNumbers" jdbcType="TINYINT" />
+    <result column="expected_numbers" property="expectedNumbers" jdbcType="TINYINT" />
+    <result column="office" property="office" jdbcType="VARCHAR" />
+    <result column="achievements" property="achievements" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, name, gender, number, password, user_type, cellphone, qq, email, personal_profile, 
-    create_time, update_time
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
   </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, gender, avatar, number, password, user_type userType, cellphone, qq, email, personal_profile personalProfile,
+    direction, specialties, tutor_expectation tutorExpectation, professional_title professionalTitle, selected_numbers selectedNumbers,
+    expected_numbers expectedNumbers, office, achievements, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.aylfq5.online.tutor.domain.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from user
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectByNumber" resultType="com.aylfq5.online.tutor.domain.User" parameterType="java.lang.String">
-    select
-    <include refid="Base_Column_List" />
-    from user
-    where number = #{number,jdbcType=VARCHAR}
-  </select>
-  <select id="getUserList" resultType="com.aylfq5.online.tutor.domain.User" parameterType="java.lang.Integer">
-    select
-    <include refid="Base_Column_List"/>
-    from user
-    where user_type = #{type, jdbcType=TINYINT}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from user
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  <delete id="deleteByExample" parameterType="com.aylfq5.online.tutor.domain.UserExample" >
+    delete from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
   <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.User" >
     insert into user (id, name, gender, 
-      number, password, user_type, 
-      cellphone, qq, email, 
-      personal_profile, create_time, update_time
-      )
+      avatar, number, password, 
+      user_type, cellphone, qq, email, 
+      personal_profile, direction, specialties, 
+      tutor_expectation, professional_title, selected_numbers, 
+      expected_numbers, office, achievements, 
+      create_time, update_time)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, 
-      #{number,jdbcType=CHAR}, #{password,jdbcType=VARCHAR}, #{userType,jdbcType=BIT}, 
-      #{cellphone,jdbcType=CHAR}, #{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{personalProfile,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{avatar,jdbcType=VARCHAR}, #{number,jdbcType=CHAR}, #{password,jdbcType=VARCHAR}, 
+      #{userType,jdbcType=BIT}, #{cellphone,jdbcType=CHAR}, #{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{personalProfile,jdbcType=VARCHAR}, #{direction,jdbcType=VARCHAR}, #{specialties,jdbcType=VARCHAR}, 
+      #{tutorExpectation,jdbcType=VARCHAR}, #{professionalTitle,jdbcType=VARCHAR}, #{selectedNumbers,jdbcType=TINYINT}, 
+      #{expectedNumbers,jdbcType=TINYINT}, #{office,jdbcType=VARCHAR}, #{achievements,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.aylfq5.online.tutor.domain.User" >
     insert into user
@@ -64,6 +145,9 @@
       </if>
       <if test="gender != null" >
         gender,
+      </if>
+      <if test="avatar != null" >
+        avatar,
       </if>
       <if test="number != null" >
         number,
@@ -86,6 +170,30 @@
       <if test="personalProfile != null" >
         personal_profile,
       </if>
+      <if test="direction != null" >
+        direction,
+      </if>
+      <if test="specialties != null" >
+        specialties,
+      </if>
+      <if test="tutorExpectation != null" >
+        tutor_expectation,
+      </if>
+      <if test="professionalTitle != null" >
+        professional_title,
+      </if>
+      <if test="selectedNumbers != null" >
+        selected_numbers,
+      </if>
+      <if test="expectedNumbers != null" >
+        expected_numbers,
+      </if>
+      <if test="office != null" >
+        office,
+      </if>
+      <if test="achievements != null" >
+        achievements,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
@@ -102,6 +210,9 @@
       </if>
       <if test="gender != null" >
         #{gender,jdbcType=BIT},
+      </if>
+      <if test="avatar != null" >
+        #{avatar,jdbcType=VARCHAR},
       </if>
       <if test="number != null" >
         #{number,jdbcType=CHAR},
@@ -124,6 +235,30 @@
       <if test="personalProfile != null" >
         #{personalProfile,jdbcType=VARCHAR},
       </if>
+      <if test="direction != null" >
+        #{direction,jdbcType=VARCHAR},
+      </if>
+      <if test="specialties != null" >
+        #{specialties,jdbcType=VARCHAR},
+      </if>
+      <if test="tutorExpectation != null" >
+        #{tutorExpectation,jdbcType=VARCHAR},
+      </if>
+      <if test="professionalTitle != null" >
+        #{professionalTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="selectedNumbers != null" >
+        #{selectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="expectedNumbers != null" >
+        #{expectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="office != null" >
+        #{office,jdbcType=VARCHAR},
+      </if>
+      <if test="achievements != null" >
+        #{achievements,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -132,35 +267,178 @@
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="com.aylfq5.online.tutor.domain.UserExample" resultType="java.lang.Integer" >
+    select count(*) from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+    <select id="getUserList" resultType="com.aylfq5.online.tutor.domain.User">
+      select
+      <include refid="Base_Column_List" />
+      from user
+      where user_type = #{type,jdbcType=BIGINT}
+    </select>
+  <select id="selectByNumber" resultType="com.aylfq5.online.tutor.domain.User">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where number = #{number,jdbcType=BIGINT}
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null" >
+        gender = #{record.gender,jdbcType=BIT},
+      </if>
+      <if test="record.avatar != null" >
+        avatar = #{record.avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=CHAR},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userType != null" >
+        user_type = #{record.userType,jdbcType=BIT},
+      </if>
+      <if test="record.cellphone != null" >
+        cellphone = #{record.cellphone,jdbcType=CHAR},
+      </if>
+      <if test="record.qq != null" >
+        qq = #{record.qq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personalProfile != null" >
+        personal_profile = #{record.personalProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.direction != null" >
+        direction = #{record.direction,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specialties != null" >
+        specialties = #{record.specialties,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tutorExpectation != null" >
+        tutor_expectation = #{record.tutorExpectation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.professionalTitle != null" >
+        professional_title = #{record.professionalTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.selectedNumbers != null" >
+        selected_numbers = #{record.selectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="record.expectedNumbers != null" >
+        expected_numbers = #{record.expectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="record.office != null" >
+        office = #{record.office,jdbcType=VARCHAR},
+      </if>
+      <if test="record.achievements != null" >
+        achievements = #{record.achievements,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user
+    set id = #{record.id,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=BIT},
+      avatar = #{record.avatar,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=CHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      user_type = #{record.userType,jdbcType=BIT},
+      cellphone = #{record.cellphone,jdbcType=CHAR},
+      qq = #{record.qq,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      personal_profile = #{record.personalProfile,jdbcType=VARCHAR},
+      direction = #{record.direction,jdbcType=VARCHAR},
+      specialties = #{record.specialties,jdbcType=VARCHAR},
+      tutor_expectation = #{record.tutorExpectation,jdbcType=VARCHAR},
+      professional_title = #{record.professionalTitle,jdbcType=VARCHAR},
+      selected_numbers = #{record.selectedNumbers,jdbcType=TINYINT},
+      expected_numbers = #{record.expectedNumbers,jdbcType=TINYINT},
+      office = #{record.office,jdbcType=VARCHAR},
+      achievements = #{record.achievements,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.aylfq5.online.tutor.domain.User" >
     update user
     <set >
-      <if test="name != null" >
+      <if test="name != null and name != ''" >
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="gender != null" >
         gender = #{gender,jdbcType=BIT},
       </if>
-      <if test="number != null" >
+      <if test="avatar != null and avatar != ''" >
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null and number != ''" >
         number = #{number,jdbcType=CHAR},
       </if>
-      <if test="password != null" >
+      <if test="password != null and password != ''" >
         password = #{password,jdbcType=VARCHAR},
       </if>
       <if test="userType != null" >
         user_type = #{userType,jdbcType=BIT},
       </if>
-      <if test="cellphone != null" >
+      <if test="cellphone != null and cellphone != ''" >
         cellphone = #{cellphone,jdbcType=CHAR},
       </if>
-      <if test="qq != null" >
+      <if test="qq != null and qq != ''" >
         qq = #{qq,jdbcType=VARCHAR},
       </if>
-      <if test="email != null" >
+      <if test="email != null and email != ''" >
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="personalProfile != null" >
+      <if test="personalProfile != null and personalProfile != ''" >
         personal_profile = #{personalProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null and direction != ''" >
+        direction = #{direction,jdbcType=VARCHAR},
+      </if>
+      <if test="specialties != null and specialties != ''" >
+        specialties = #{specialties,jdbcType=VARCHAR},
+      </if>
+      <if test="tutorExpectation != null and tutorExpectation != ''" >
+        tutor_expectation = #{tutorExpectation,jdbcType=VARCHAR},
+      </if>
+      <if test="professionalTitle != null and professionalTitle != ''" >
+        professional_title = #{professionalTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="selectedNumbers != null" >
+        selected_numbers = #{selectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="expectedNumbers != null" >
+        expected_numbers = #{expectedNumbers,jdbcType=TINYINT},
+      </if>
+      <if test="office != null and office != ''" >
+        office = #{office,jdbcType=VARCHAR},
+      </if>
+      <if test="achievements != null and achievements != ''" >
+        achievements = #{achievements,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -175,6 +453,7 @@
     update user
     set name = #{name,jdbcType=VARCHAR},
       gender = #{gender,jdbcType=BIT},
+      avatar = #{avatar,jdbcType=VARCHAR},
       number = #{number,jdbcType=CHAR},
       password = #{password,jdbcType=VARCHAR},
       user_type = #{userType,jdbcType=BIT},
@@ -182,6 +461,14 @@
       qq = #{qq,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       personal_profile = #{personalProfile,jdbcType=VARCHAR},
+      direction = #{direction,jdbcType=VARCHAR},
+      specialties = #{specialties,jdbcType=VARCHAR},
+      tutor_expectation = #{tutorExpectation,jdbcType=VARCHAR},
+      professional_title = #{professionalTitle,jdbcType=VARCHAR},
+      selected_numbers = #{selectedNumbers,jdbcType=TINYINT},
+      expected_numbers = #{expectedNumbers,jdbcType=TINYINT},
+      office = #{office,jdbcType=VARCHAR},
+      achievements = #{achievements,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

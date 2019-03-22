@@ -1,5 +1,11 @@
 server:
   port: 808
+#  ssl:
+#    key-store: classpath:server.p12
+#    key-store-password: 123123
+#    key-store-type: PKCS12
+#    key-alias: 1
+
 spring:
   messages:
     basename: i18n/Messages,i18n/Pages
@@ -17,8 +23,22 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
   resources:
-    add-mappings: false
+    add-mappings: true
+  jackson:
+    default-property-inclusion: non_null
+  thymeleaf:
+    cache: false
 ## 该配置节点为独立的节点，这个配置放在spring的节点下将导致配置无法被识别
 mybatis:
   mapper-locations: classpath:mappers/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
   type-aliases-package: com.aylfq5.online.tutor.domain  # 注意：对应实体类的路径
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 七牛配置信息
+
+qiniu:
+  accesskey: WbwkAoZSrnpf6Xf78TjfntuuKms0Uo2LnW5SVa-r
+  secretkey: 73xQTIe5pXUQeeUnU_kbYkPv9gC2iAuwFYQeVh7H
+  bucket: aylfq5_online_tutor
+  source-prefix: http://porbzia1c.bkt.clouddn.com/

@@ -36,12 +36,12 @@ public class OnlineTutorResult {
     private Object data;
 
 
-    public static OnlineTutorResult build(Integer status, String msg, Integer count, Object data) {
-        return new OnlineTutorResult(status, msg, count, data);
+    public static OnlineTutorResult build(Integer code, String msg, Integer count, Object data) {
+        return new OnlineTutorResult(code, msg, count, data);
     }
 
-    public static OnlineTutorResult build(Integer status, String msg) {
-        return new OnlineTutorResult(status, msg);
+    public static OnlineTutorResult build(Integer code, String msg) {
+        return new OnlineTutorResult(code, msg);
     }
 
     public static OnlineTutorResult ok(Object data) {
@@ -56,8 +56,8 @@ public class OnlineTutorResult {
 
     }
 
-    public static OnlineTutorResult build(Integer status, String msg, Integer count) {
-        return new OnlineTutorResult(status, msg, count, null);
+    public static OnlineTutorResult build(Integer code, String msg, Integer count) {
+        return new OnlineTutorResult(code, msg, count, null);
     }
 
     public OnlineTutorResult(Integer code, String msg, Integer count, Object data) {
@@ -73,7 +73,7 @@ public class OnlineTutorResult {
 
     public OnlineTutorResult(Object data) {
         this.code = 200;
-        this.msg = "OK";
+        this.msg = "ok";
         this.data = data;
     }
 

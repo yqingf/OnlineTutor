@@ -3,21 +3,15 @@ package com.aylfq5.online.tutor.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
-* @Description:    用户实体
-* @Author:         aylfq5
-* @CreateDate:     2019/2/22 9:21
-* @Version:        1.0
-*/
 public class User implements Serializable {
-    /**ID*/
+    /**主键*/
     private Long id;
     /**姓名*/
     private String name;
     /**性别:1-男, 2-女*/
     private Integer gender;
-    /**职称*/
-    private String professionalTitle;
+    /**头像*/
+    private String avatar;
     /**学号/教师号*/
     private String number;
     /**密码*/
@@ -34,6 +28,22 @@ public class User implements Serializable {
     private String email;
     /**个人简介*/
     private String personalProfile;
+    /**专业/研究方向*/
+    private String direction;
+    /**专业特长/主讲课程*/
+    private String specialties;
+    /**导师期望/学生要求*/
+    private String tutorExpectation;
+    /**导师职称*/
+    private String professionalTitle;
+    /**已选人数*/
+    private Integer selectedNumbers;
+    /**预带人数*/
+    private Integer expectedNumbers;
+    /**办公室*/
+    private String office;
+    /**教研成果*/
+    private String achievements;
     /**创建时间*/
     private Date createTime;
     /**修改时间*/
@@ -65,12 +75,12 @@ public class User implements Serializable {
         this.gender = gender;
     }
 
-    public String getProfessionalTitle() {
-        return professionalTitle;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setProfessionalTitle(String professionalTitle) {
-        this.professionalTitle = professionalTitle;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar == null ? null : avatar.trim();
     }
 
     public String getNumber() {
@@ -81,20 +91,20 @@ public class User implements Serializable {
         this.number = number == null ? null : number.trim();
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Integer getUserType() {
@@ -135,6 +145,70 @@ public class User implements Serializable {
 
     public void setPersonalProfile(String personalProfile) {
         this.personalProfile = personalProfile == null ? null : personalProfile.trim();
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction == null ? null : direction.trim();
+    }
+
+    public String getSpecialties() {
+        return specialties;
+    }
+
+    public void setSpecialties(String specialties) {
+        this.specialties = specialties == null ? null : specialties.trim();
+    }
+
+    public String getTutorExpectation() {
+        return tutorExpectation;
+    }
+
+    public void setTutorExpectation(String tutorExpectation) {
+        this.tutorExpectation = tutorExpectation == null ? null : tutorExpectation.trim();
+    }
+
+    public String getProfessionalTitle() {
+        return professionalTitle;
+    }
+
+    public void setProfessionalTitle(String professionalTitle) {
+        this.professionalTitle = professionalTitle == null ? null : professionalTitle.trim();
+    }
+
+    public Integer getSelectedNumbers() {
+        return selectedNumbers;
+    }
+
+    public void setSelectedNumbers(Integer selectedNumbers) {
+        this.selectedNumbers = selectedNumbers;
+    }
+
+    public Integer getExpectedNumbers() {
+        return expectedNumbers;
+    }
+
+    public void setExpectedNumbers(Integer expectedNumbers) {
+        this.expectedNumbers = expectedNumbers;
+    }
+
+    public String getOffice() {
+        return office;
+    }
+
+    public void setOffice(String office) {
+        this.office = office == null ? null : office.trim();
+    }
+
+    public String getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(String achievements) {
+        this.achievements = achievements == null ? null : achievements.trim();
     }
 
     public Date getCreateTime() {

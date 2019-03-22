@@ -1,6 +1,9 @@
 package com.aylfq5.online.tutor.dao;
 
 import com.aylfq5.online.tutor.domain.TutorInfo;
+import com.aylfq5.online.tutor.domain.User;
+
+import java.util.List;
 
 public interface TutorInfoMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,6 @@ public interface TutorInfoMapper {
     int updateByPrimaryKeySelective(TutorInfo record);
 
     int updateByPrimaryKey(TutorInfo record);
+
+    List<User> selectAllTutor();
 }
