@@ -39,7 +39,7 @@
             </div>
             <div class="layui-input-inline">
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img headImage" style="width: 124px; height: 124px;" src="http://t.cn/RCzsdCq" id="avatar">
+                    <img class="layui-upload-img headImage" style="width: 124px; height: 124px;" th:src="${result.avatar}" id="avatar">
                     <p id="demoText"></p>
                 </div>
             </div>
@@ -140,7 +140,7 @@
                 主讲课程
             </label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="specialties" name="specialties" th:value="${result.specialties}" class="layui-textarea" ></textarea>
+                <textarea placeholder="请输入内容" id="specialties" name="specialties" class="layui-textarea" th:text="${result.specialties}"></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -148,7 +148,7 @@
                 学生要求
             </label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="tutorExpectation" name="tutorExpectation" th:value="${result.tutorExpectation}" class="layui-textarea" ></textarea>
+                <textarea placeholder="请输入内容" id="tutorExpectation" name="tutorExpectation" th:text="${result.tutorExpectation}" class="layui-textarea" ></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -156,7 +156,7 @@
                 教研成果
             </label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="achievements" name="achievements" th:value="${result.achievements}" class="layui-textarea" ></textarea>
+                <textarea placeholder="请输入内容" id="achievements" name="achievements" th:text="${result.achievements}" class="layui-textarea" ></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -164,7 +164,7 @@
                 个人简介
             </label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="desc" name="personalProfile" th:value="${result.personalProfile}" class="layui-textarea" ></textarea>
+                <textarea placeholder="请输入内容" id="desc" name="personalProfile" th:text="${result.personalProfile}" class="layui-textarea" ></textarea>
             </div>
         </div>
         <div class="layui-form-item">

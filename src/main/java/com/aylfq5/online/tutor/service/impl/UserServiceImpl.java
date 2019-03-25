@@ -7,6 +7,7 @@ import com.aylfq5.online.tutor.dao.UserMapper;
 import com.aylfq5.online.tutor.domain.StudentInfo;
 import com.aylfq5.online.tutor.domain.TutorInfo;
 import com.aylfq5.online.tutor.domain.User;
+import com.aylfq5.online.tutor.domain.UserExample;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.IDUtils;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
@@ -80,6 +81,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public OnlineTutorResult updateByPrimaryKeySelective(User record) {
+        User user = userMapper.selectByPrimaryAndNumber(record);
+        if (user != null) {
+            return OnlineTutorResult.build(400, "职工号已存在！");
+        }
         int res = userMapper.updateByPrimaryKeySelective(record);
         if (res <= 0) {
             return OnlineTutorResult.build(400, "修改失败！");
@@ -104,5 +109,11 @@ public class UserServiceImpl implements UserService {
             return OnlineTutorResult.build(4001, "暂无数据!", 0);
         }
         return OnlineTutorResult.build(200, "ok",userList.size(), userList);
+    }
+
+    @Override
+    public OnlineTutorResult deleteBatch(String[] ids) {
+
+        return null;
     }
 }

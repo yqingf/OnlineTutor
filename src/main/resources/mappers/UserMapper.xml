@@ -102,9 +102,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
+  <select id="selectByPrimaryKey" resultType="com.aylfq5.online.tutor.domain.User" parameterType="java.lang.Long" >
+    select
+      <include refid="Base_Column_List" />
     from user
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -119,19 +119,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.User" >
-    insert into user (id, name, gender, 
-      avatar, number, password, 
-      user_type, cellphone, qq, email, 
-      personal_profile, direction, specialties, 
-      tutor_expectation, professional_title, selected_numbers, 
-      expected_numbers, office, achievements, 
+    insert into user (id, name, gender,
+      avatar, number, password,
+      user_type, cellphone, qq, email,
+      personal_profile, direction, specialties,
+      tutor_expectation, professional_title, selected_numbers,
+      expected_numbers, office, achievements,
       create_time, update_time)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, 
-      #{avatar,jdbcType=VARCHAR}, #{number,jdbcType=CHAR}, #{password,jdbcType=VARCHAR}, 
-      #{userType,jdbcType=BIT}, #{cellphone,jdbcType=CHAR}, #{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{personalProfile,jdbcType=VARCHAR}, #{direction,jdbcType=VARCHAR}, #{specialties,jdbcType=VARCHAR}, 
-      #{tutorExpectation,jdbcType=VARCHAR}, #{professionalTitle,jdbcType=VARCHAR}, #{selectedNumbers,jdbcType=TINYINT}, 
-      #{expectedNumbers,jdbcType=TINYINT}, #{office,jdbcType=VARCHAR}, #{achievements,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=BIT},
+      #{avatar,jdbcType=VARCHAR}, #{number,jdbcType=CHAR}, #{password,jdbcType=VARCHAR},
+      #{userType,jdbcType=BIT}, #{cellphone,jdbcType=CHAR}, #{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+      #{personalProfile,jdbcType=VARCHAR}, #{direction,jdbcType=VARCHAR}, #{specialties,jdbcType=VARCHAR},
+      #{tutorExpectation,jdbcType=VARCHAR}, #{professionalTitle,jdbcType=VARCHAR}, #{selectedNumbers,jdbcType=TINYINT},
+      #{expectedNumbers,jdbcType=TINYINT}, #{office,jdbcType=VARCHAR}, #{achievements,jdbcType=VARCHAR},
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.aylfq5.online.tutor.domain.User" >
@@ -285,7 +285,14 @@
     from user
     where number = #{number,jdbcType=BIGINT}
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+    <select id="selectByPrimaryAndNumber" resultType="com.aylfq5.online.tutor.domain.User">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where number = #{number,jdbcType=BIGINT}
+        and id <![CDATA[ <> ]]> #{id, jdbcType=VARCHAR}
+    </select>
+    <update id="updateByExampleSelective" parameterType="map" >
     update user
     <set >
       <if test="record.id != null" >

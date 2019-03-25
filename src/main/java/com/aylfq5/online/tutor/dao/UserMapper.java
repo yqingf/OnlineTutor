@@ -31,4 +31,6 @@ public interface UserMapper {
     List<User> getUserList(int type);
 
     User selectByNumber(String number);
+
+    User selectByPrimaryAndNumber(User record);
 }

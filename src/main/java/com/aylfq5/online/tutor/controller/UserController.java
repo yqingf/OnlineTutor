@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description:
@@ -35,20 +36,19 @@ public class UserController {
         return "/user/login";
     }
 
+
     /**
-     * 跳转到修改页面
+     * 查看用户详情
      *
      * @param id
-     * @param model
      * @return
      */
-    @GetMapping("/v1/edit/{id}")
-    public String toEdit(@PathVariable String id, Model model) {
+    @GetMapping("/v1/{id}")
+    public String toDetail(@PathVariable String id, Model model) {
         OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
         model.addAttribute("result", result.getData());
-        return "/user/edit";
+        return "/tutor/detail";
     }
-
     /**
      * 用户列表
      *
@@ -72,6 +72,13 @@ public class UserController {
     @ResponseBody
     public OnlineTutorResult delete(@PathVariable String id) {
         OnlineTutorResult result = userService.deleteByPrimaryKey(Long.parseLong(id));
+        return result;
+    }
+
+    @DeleteMapping("/v1")
+    @ResponseBody
+    public OnlineTutorResult deleteBatch(String[] ids) {
+        OnlineTutorResult result = userService.deleteBatch(ids);
         return result;
     }
 
@@ -102,17 +109,6 @@ public class UserController {
     }
 
 
-    /**
-     * 查看用户详情
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/v1/{id}")
-    @ResponseBody
-    public OnlineTutorResult getUserDetail(@PathVariable String id) {
-        OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
-        return result;
-    }
+
 
 }

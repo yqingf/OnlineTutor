@@ -4,6 +4,8 @@ import com.aylfq5.online.tutor.service.TutorService;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,9 +45,18 @@ public class TutorController {
         return result;
     }
 
-    @RequestMapping("edit.html")
-    public String toTutorEdit() {
-        return "/tutor/edit";
+    /**
+     * 跳转到修改页面
+     *
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/v1/edit/{id}")
+    public String toEdit(@PathVariable String id, Model model) {
+        OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
+        model.addAttribute("result", result.getData());
+        return "/user/edit";
     }
 
     @RequestMapping("list.html")

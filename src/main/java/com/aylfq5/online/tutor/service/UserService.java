@@ -29,4 +29,6 @@ public interface UserService {
      * @return
      */
     OnlineTutorResult getUserList(int type);
+
+    OnlineTutorResult deleteBatch(String[] ids);
 }

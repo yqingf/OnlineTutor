@@ -6,10 +6,13 @@ import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
+import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.BatchStatus;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import com.qiniu.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +44,7 @@ public class UploadController {
     private String bucket;
     @Value("${qiniu.source-prefix}")
     private String prefix;
+
     /**
      * 文件上传
      *
@@ -75,5 +79,31 @@ public class UploadController {
         }
         putRet.key = prefix + putRet.key;
         return OnlineTutorResult.ok(putRet);
+    }
+
+    /**
+     * 单个文件删除
+     *
+     * @param filename
+     * @return
+     */
+    @RequestMapping("/delete")
+    public OnlineTutorResult delete(String filename) {
+        if (StringUtils.isNullOrEmpty(filename)) {
+            return OnlineTutorResult.build(400, "文件名不能为空！");
+        }
+        String key = filename.substring(filename.lastIndexOf("/") + 1);
+        Configuration configuration = new Configuration(Zone.zone1());
+        Auth auth = Auth.create(accessKey, secretKey);
+        try {
+            BucketManager bucketManager = new BucketManager(auth, configuration);
+            Response response = bucketManager.delete(bucket, key);
+            if (response.statusCode == 200) {
+                return OnlineTutorResult.build(200, "删除成功！");
+            }
+        } catch (QiniuException e) {
+            e.printStackTrace();
+        }
+        return OnlineTutorResult.build(400, "删除失败！");
     }
 }
