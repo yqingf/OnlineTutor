@@ -36,32 +36,6 @@ public class UserController {
         return "/user/login";
     }
 
-
-    /**
-     * 查看用户详情
-     *
-     * @param id
-     * @return
-     */
-    @GetMapping("/v1/{id}")
-    public String toDetail(@PathVariable String id, Model model) {
-        OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
-        model.addAttribute("result", result.getData());
-        return "/tutor/detail";
-    }
-    /**
-     * 用户列表
-     *
-     * @param type 类型 1-学生  2-导师  3-管理员
-     * @return
-     */
-    @RequestMapping("/v1")
-    @ResponseBody
-    public OnlineTutorResult getUserList(Integer type) {
-        OnlineTutorResult result = userService.getUserList(type);
-        return result;
-    }
-
     /**
      * 删除用户
      *
@@ -75,13 +49,18 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 批量删除
+     *
+     * @param userList
+     * @return
+     */
     @DeleteMapping("/v1")
     @ResponseBody
-    public OnlineTutorResult deleteBatch(String[] ids) {
-        OnlineTutorResult result = userService.deleteBatch(ids);
+    public OnlineTutorResult deleteBatch(@RequestBody List<User> userList) {
+        OnlineTutorResult result = userService.deleteBatch(userList);
         return result;
     }
-
     /**
      * 添加用户
      *
@@ -94,7 +73,6 @@ public class UserController {
         OnlineTutorResult result = userService.insert(user);
         return result;
     }
-
     /**
      * 修改用户信息
      *
@@ -107,8 +85,6 @@ public class UserController {
         OnlineTutorResult result = userService.updateByPrimaryKeySelective(user);
         return result;
     }
-
-
 
 
 }

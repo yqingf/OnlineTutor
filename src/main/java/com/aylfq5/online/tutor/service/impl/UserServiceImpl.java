@@ -12,6 +12,9 @@ import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.IDUtils;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import com.aylfq5.online.tutor.util.Operation;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -103,17 +106,33 @@ public class UserServiceImpl implements UserService {
 
     @Operation("获取用户列表")
     @Override
-    public OnlineTutorResult getUserList(int type) {
+    public OnlineTutorResult getUserList(Integer page, Integer rows, Integer type) {
+        PageHelper.startPage(page == null ? 1 : page, rows == null ? 20 : rows);
         List<User> userList = userMapper.getUserList(type);
         if (userList.size() <= 0) {
             return OnlineTutorResult.build(4001, "暂无数据!", 0);
         }
-        return OnlineTutorResult.build(200, "ok",userList.size(), userList);
+        PageInfo pageInfo = new PageInfo(userList);
+        long total = pageInfo.getTotal();
+
+        return OnlineTutorResult.build(200, "ok",(int) total, userList);
     }
 
     @Override
-    public OnlineTutorResult deleteBatch(String[] ids) {
-
-        return null;
+    public OnlineTutorResult deleteBatch(List<User> userList) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("(");
+        for (User user : userList) {
+            sb.append(user.getId());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(")");
+        System.out.println(sb.toString());
+        int res = userMapper.deleteBatch(sb.toString());
+        if (res < 0) {
+            return OnlineTutorResult.build(400, "删除失败");
+        }
+        return OnlineTutorResult.build(200, "删除成功！");
     }
 }

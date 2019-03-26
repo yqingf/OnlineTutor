@@ -1,7 +1,16 @@
 package com.aylfq5.online.tutor.controller;
 
+import com.aylfq5.online.tutor.service.StudentService;
+import com.aylfq5.online.tutor.service.UserService;
+import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
 
 /**
  * @Description: 学生管理Controller
@@ -12,20 +21,58 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/student")
 public class StudentController {
+
+    @Resource
+    private StudentService studentService;
+    @Resource
+    private UserService userService;
+
     @RequestMapping("add.html")
     public String toTutorAdd() {
-        return "/user/student-add";
+        return "/student/add";
     }
-    @RequestMapping("delete.html")
-    public String tutorDelete() {
-        return "/user/student-list";
+
+    /**
+     * 学生详情
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/v1/{id}")
+    public String toDetail(@PathVariable String id, Model model) {
+        OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
+        model.addAttribute("result", result.getData());
+        return "/student/detail";
     }
-    @RequestMapping("edit.html")
-    public String toTutorEdit() {
-        return "/user/student-edit";
+
+    /**
+     * 跳转到修改页面
+     *
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/v1/edit/{id}")
+    public String toEdit(@PathVariable String id, Model model) {
+        OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
+        model.addAttribute("result", result.getData());
+        return "/student/edit";
     }
+
     @RequestMapping("list.html")
     public String toTutorList() {
-        return "/user/student-list";
+        return "/student/list";
+    }
+
+    /**
+     * 获取学生列表
+     *
+     * @return
+     */
+    @GetMapping("/list")
+    @ResponseBody
+    public OnlineTutorResult getTutorList(Integer page, Integer rows, Integer type) {
+        OnlineTutorResult result = userService.getUserList(page, rows, type);
+        return result;
     }
 }

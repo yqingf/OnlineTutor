@@ -118,7 +118,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.User" >
+    <delete id="deleteBatch">
+      delete from user where id in ${ids}
+    </delete>
+    <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.User" >
     insert into user (id, name, gender,
       avatar, number, password,
       user_type, cellphone, qq, email,

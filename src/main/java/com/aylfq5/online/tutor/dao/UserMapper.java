@@ -33,4 +33,6 @@ public interface UserMapper {
     User selectByNumber(String number);
 
     User selectByPrimaryAndNumber(User record);
+
+    int deleteBatch(@Param("ids") String ids);
 }

@@ -1,5 +1,6 @@
 package com.aylfq5.online.tutor.controller;
 
+import com.aylfq5.online.tutor.constant.UserType;
 import com.aylfq5.online.tutor.service.TutorService;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
@@ -33,16 +34,16 @@ public class TutorController {
     }
 
     /**
-     * 删除
+     * 导师详情
      *
      * @param id
      * @return
      */
-    @RequestMapping("/delete/{id}")
-    @ResponseBody
-    public OnlineTutorResult tutorDelete(@PathVariable String id) {
-        OnlineTutorResult result = userService.deleteByPrimaryKey(Long.parseLong(id));
-        return result;
+    @GetMapping("/v1/{id}")
+    public String toDetail(@PathVariable String id, Model model) {
+        OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
+        model.addAttribute("result", result.getData());
+        return "/tutor/detail";
     }
 
     /**
@@ -56,36 +57,27 @@ public class TutorController {
     public String toEdit(@PathVariable String id, Model model) {
         OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
         model.addAttribute("result", result.getData());
-        return "/user/edit";
+        return "/tutor/edit";
     }
 
+    /**
+     * 导师列表页面
+     *
+     * @return
+     */
     @RequestMapping("list.html")
     public String toTutorList() {
         return "/tutor/list";
     }
-
     /**
-     * 导师列表
+     * 导师列表数据
      *
      * @return
      */
     @RequestMapping("/list")
     @ResponseBody
-    public OnlineTutorResult getTutorList() {
-        OnlineTutorResult result = tutorService.getTutorList();
-        return result;
-    }
-
-    /**
-     * 导师详情
-     *
-     * @param id
-     * @return
-     */
-    @RequestMapping("/detail/{id}")
-    @ResponseBody
-    public OnlineTutorResult getTutorDetail(@PathVariable String id) {
-        OnlineTutorResult result = tutorService.getTutorDetailById(Long.parseLong(id));
+    public OnlineTutorResult getTutorList(Integer page, Integer rows, int type) {
+        OnlineTutorResult result = userService.getUserList(page, rows, type);
         return result;
     }
 }

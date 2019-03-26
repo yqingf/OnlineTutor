@@ -23,12 +23,6 @@ public class TutorServiceImpl implements TutorService {
     private TutorInfoMapper tutorInfoMapper;
 
     @Override
-    public OnlineTutorResult getTutorList() {
-        List<User> tutorList = tutorInfoMapper.selectAllTutor();
-        return OnlineTutorResult.build(200,"ok", tutorList.size(), tutorList);
-    }
-
-    @Override
     public OnlineTutorResult getTutorDetailById(Long id) {
         TutorInfo info = tutorInfoMapper.selectByPrimaryKey(id);
         return OnlineTutorResult.ok(info);

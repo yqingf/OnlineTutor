@@ -18,5 +18,4 @@ public interface TutorInfoMapper {
 
     int updateByPrimaryKey(TutorInfo record);
 
-    List<User> selectAllTutor();
 }

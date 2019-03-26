@@ -26,11 +26,6 @@
     from tutor_info
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectAllTutor" resultMap="com.aylfq5.online.tutor.dao.UserMapper.BaseResultMap">
-    select u.id,u.name,u.gender,u.professional_title,u.number,u.cellphone,u.qq,u.email,u.personal_profile
-    from user u
-    where u.user_type = 2
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from tutor_info
     where id = #{id,jdbcType=BIGINT}

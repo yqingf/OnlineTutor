@@ -3,6 +3,8 @@ package com.aylfq5.online.tutor.service;
 import com.aylfq5.online.tutor.domain.User;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 
+import java.util.List;
+
 /**
  * @Description:
  * @Author: aylfq5
@@ -28,7 +30,7 @@ public interface UserService {
      * @param type 用户类型(1-学生, 2-导师, 3-管理员)
      * @return
      */
-    OnlineTutorResult getUserList(int type);
+    OnlineTutorResult getUserList(Integer page, Integer rows, Integer type);
 
-    OnlineTutorResult deleteBatch(String[] ids);
+    OnlineTutorResult deleteBatch(List<User> userList);
 }

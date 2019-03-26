@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <script type="text/javascript" th:src="@{/js/jquery-1.8.2.min.js}"></script>
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                <span class="x-red">*</span>姓名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="username" name="name" required="" lay-verify="username" th:value="${result.name}"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>性别
+            </label>
+            <div class="layui-input-block">
+                <input type="radio" name="gender" value="1" title="男" th:field="*{result.gender}">
+                <input type="radio" name="gender" value="2" title="女" th:field="*{result.gender}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">头像</label>
+            <div class="layui-input-inline uploadHeadImage">
+                <div class="layui-upload-drag" id="headImg">
+                    <i class="layui-icon"></i>
+                    <p>点击上传图片，或将图片拖拽到此处</p>
+                </div>
+            </div>
+            <div class="layui-input-inline">
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img headImage" style="width: 124px; height: 124px;" th:src="${result.avatar}" id="avatar">
+                    <p id="demoText"></p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="number" class="layui-form-label">
+                <span class="x-red">*</span>学号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="number" name="number" required="" lay-verify="required" th:value="${result.number}"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>手机号
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="phone" name="cellphone" required="" lay-verify="phone" th:value="${result.cellphone}"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="qq" class="layui-form-label">
+                <span class="x-red"></span>QQ
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="qq" name="qq" required="" th:value="${result.qq}"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="email" class="layui-form-label">
+                <span class="x-red"></span>邮箱
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="email" name="email" required="" lay-verify="email" th:value="${result.email}"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="hidden" id="userType" name="userType" value="1"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="hidden"  name="avatar" value=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label for="desc" class="layui-form-label">
+                个人简介
+            </label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" id="desc" name="personalProfile" th:text="${result.personalProfile}" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="">
+                保存
+            </button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer', 'upload', 'element'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            upload = layui.upload,
+            element = layui.element;
+        var uploadInst = upload.render({
+            elem: '#headImg',
+            url: '/upload/headImg',
+            size: 500,
+            before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#avatar').attr('src', result); //图片链接（base64）
+                });
+            },
+            done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
+                /*   console.log(res.data.src);*/
+                window.parent.uploadHeadImage(res.data.src);
+                    var demoText = $('#demoText');
+                demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');
+            },
+            error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+        element.init();
+        //自定义验证规则
+        form.verify({
+            username: [
+                /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/,
+                '姓名不正确!'],
+            password: [
+                /^[\S]{6,12}$/,
+                '密码在6~12个字符之间，且不能出现空格!'],
+            confirmPassword: function(value) {
+                var password = $("#password").val();
+                if(value != password.trim()){
+                    return '两次输入的密码不一致!';
+                }
+            },
+            expectedNumbers: function(value) {
+                if (value.trim()  == "" || value.trim() == null) {
+                    return '预带人数不能为空!';
+                }
+            },
+            phone: [/^1(3|4|5|7|8)\d{9}$/,
+                '手机号不正确!'],
+            email: function(value) {
+                if(value.trim() != "" && !/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g.test(value)) {
+                    return "邮箱格式不正确!";
+                }
+            }
+
+        });
+
+        //监听提交
+        form.on('submit(add)', function (data) {
+            var url = "[[@{/user/v1}]]";
+            var param = data.field;
+            $.ajax({
+                url: url,
+                type: "post",
+                data:param,//表格数据序列化
+                success: function (res) {
+                    console.log(res);
+                    if(res.code == 200) {
+                        layer.msg(res.msg, {
+                            icon: 6,//成功的表情
+                            time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                        }, function(){
+                            location.reload();
+                        });
+                    } else {
+                        layer.msg(res.msg,{icon: 5});//失败的表情
+                        return;
+                    }
+                }
+
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+
+</html>

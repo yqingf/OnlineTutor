@@ -9,7 +9,5 @@ import com.aylfq5.online.tutor.util.OnlineTutorResult;
 * @Version:        1.0
 */
 public interface TutorService {
-    OnlineTutorResult getTutorList();
-
     OnlineTutorResult getTutorDetailById(Long id);
 }

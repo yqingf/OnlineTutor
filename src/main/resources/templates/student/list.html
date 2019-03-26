@@ -27,7 +27,7 @@
         </button>
     </xblock>
 </div>
-<table class="layui-table" lay-filter="tutor-list" id="tutor-table"></table>
+<table class="layui-table" lay-filter="student-list" id="student-table"></table>
 
 </div>
 <script>
@@ -43,10 +43,10 @@
             elem: '#end' //指定元素
         });
         table.render({
-            elem: '#tutor-table',
-            url: '[[@{/tutor/list}]]',
-            method: 'get',
-            page: {theme: '#009637'},
+            elem: '#student-table',
+            url: '[[@{/student/list}]]',
+            method: 'GET',
+            page: {theme: '#009688'},
             limit: 10,
             limits: [10, 20, 30, 50, 100],
             loading: true,
@@ -56,16 +56,14 @@
             cols: [
                 [
                     {type: 'checkbox'},
-                    {field: 'id', title: 'ID', width: '10%', sort: true},
-                    {field: 'name', title: '姓名', width: '10%', sort: true},
-                    {field: 'gender', title: '性别', width: '5%', sort: true, templet: '#sexTpl'},
-                    {field: 'professionalTitle', width: '5%', title: '职称'},
-                    {field: 'expectedNumbers', width: '10%', title: '预带人数'},
-                    {field: 'number', title: '教师号', width: '10%', sort: true},
-                    {field: 'cellphone', title: '电话', width: '10%', sort: true,},
-                    {field: 'qq', title: 'QQ', width: '10%', sort: true, align: 'right'},
-                    {field: 'email', title: '电子邮箱', width: '10%', sort: true, align: 'right'},
-                    {field: 'personalProfile', width: '20%', title: '个人简介'},
+                    {field: 'id', title: 'ID',  sort: true},
+                    {field: 'name', title: '姓名',  sort: true},
+                    {field: 'gender', title: '性别',  sort: true, templet: '#sexTpl'},
+                    {field: 'number', title: '学号', sort: true},
+                    {field: 'cellphone', title: '电话', sort: true,},
+                    {field: 'qq', title: 'QQ', sort: true, align: 'right'},
+                    {field: 'email', title: '电子邮箱', sort: true, align: 'right'},
+                    {field: 'personalProfile',  title: '个人简介'},
                     {fixed: 'right', title: '操作', toolbar: '#rowDemo', width: 150, align: 'right'}
                 ]
             ],
@@ -74,7 +72,7 @@
                 limitName: 'rows'
             },
             where: {
-                "type": 2
+                "type": 1
             },
             response: {
                 statusName: 'code', //规定数据状态的字段名称，默认：code
@@ -84,11 +82,11 @@
                 dataName: 'data', //规定数据列表的字段名称，默认：data
             },
         })
-        table.on('toolbar(tutor-list)', function (obj) {
+        table.on('toolbar(student-list)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id).data;
             switch (obj.event) {
                 case 'add':
-                    x_admin_show('添加用户', '/tutor/add.html');
+                    x_admin_show('添加用户', '/student/add.html');
                     break;
                 case 'deleteBatch':
                     layer.confirm('确认删除选中的数据吗?', function (index) {
@@ -99,21 +97,20 @@
                     break;
             }
         });
-        table.on('tool(tutor-list)', function (obj) {
+        table.on('tool(student-list)', function (obj) {
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             if (layEvent === 'detail') { //查看
-                x_admin_show('导师详情', '[[@{/tutor/v1/}]]' + data.id);
+                x_admin_show('学生详情', '[[@{/student/v1/}]]' + data.id);
             } else if (layEvent === 'delete') { //删除
                 layer.confirm('确认删除当前行吗？', function (index) {
                     // 向服务端发送删除指令
                     ajax("[[@{/user/v1/}]]" + data.id, null, true, "DELETE");
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     layer.close(index);
-
                 });
             } else if (layEvent === 'update') { //编辑
-                x_admin_show('导师编辑', '[[@{/tutor/v1/edit/}]]' + data.id);
+                x_admin_show('学生编辑', '[[@{/student/v1/edit/}]]' + data.id);
                 obj.update({
                     username: '123'
                     , title: 'xxx'
@@ -164,5 +161,4 @@
     }
 </script>
 </body>
-
 </html>
