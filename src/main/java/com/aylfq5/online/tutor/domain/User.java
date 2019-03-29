@@ -2,6 +2,7 @@ package com.aylfq5.online.tutor.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class User implements Serializable {
     /**主键*/
@@ -42,8 +43,14 @@ public class User implements Serializable {
     private Integer expectedNumbers;
     /**办公室*/
     private String office;
+    /**验证码*/
+    private String code;
     /**教研成果*/
     private String achievements;
+    /**
+     * 角色
+     */
+    private List<Role> roleList;
     /**创建时间*/
     private Date createTime;
     /**修改时间*/
@@ -203,12 +210,28 @@ public class User implements Serializable {
         this.office = office == null ? null : office.trim();
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getAchievements() {
         return achievements;
     }
 
     public void setAchievements(String achievements) {
         this.achievements = achievements == null ? null : achievements.trim();
+    }
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
     }
 
     public Date getCreateTime() {

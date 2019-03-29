@@ -30,12 +30,6 @@ public class UserController {
         return "/user/login";
     }
 
-    @RequestMapping("/login")
-    public String login(User user) {
-        System.out.println(user);
-        return "/user/login";
-    }
-
     /**
      * 删除用户
      *
@@ -85,6 +79,17 @@ public class UserController {
         OnlineTutorResult result = userService.updateByPrimaryKeySelective(user);
         return result;
     }
+    @PostMapping("/v1/login")
+    @ResponseBody
+    public OnlineTutorResult login(User user, Boolean rememberMe) {
+        OnlineTutorResult result = userService.login(user, rememberMe);
+        return result;
+    }
 
+    @RequestMapping("/logout")
+    public String logout() {
+
+        return "/user/toLogin.html";
+    }
 
 }

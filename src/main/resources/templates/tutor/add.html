@@ -65,7 +65,7 @@
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="number" name="number" required="" lay-verify="required"
-                       autocomplete="off" class="layui-input">
+                       autocomplete="off" class="layui-input" oninput="value=value.replace(/[^\d]/g,'')">
             </div>
         </div>
         <div class="layui-form-item">

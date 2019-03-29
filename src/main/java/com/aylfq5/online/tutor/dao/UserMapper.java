@@ -1,5 +1,7 @@
 package com.aylfq5.online.tutor.dao;
 
+import com.aylfq5.online.tutor.domain.Permission;
+import com.aylfq5.online.tutor.domain.Role;
 import com.aylfq5.online.tutor.domain.User;
 import com.aylfq5.online.tutor.domain.UserExample;
 import java.util.List;
@@ -35,4 +37,8 @@ public interface UserMapper {
     User selectByPrimaryAndNumber(User record);
 
     int deleteBatch(@Param("ids") String ids);
+
+    List<Role> selectAllRoles(Long userId);
+
+    List<Permission> selectAllPermissions(Long userId);
 }

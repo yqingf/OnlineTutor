@@ -1,20 +1,20 @@
 package com.aylfq5.online.tutor.service.impl;
 
-import com.aylfq5.online.tutor.constant.UserType;
+import com.aylfq5.online.tutor.controller.CaptchaController;
 import com.aylfq5.online.tutor.dao.StudentInfoMapper;
 import com.aylfq5.online.tutor.dao.TutorInfoMapper;
 import com.aylfq5.online.tutor.dao.UserMapper;
-import com.aylfq5.online.tutor.domain.StudentInfo;
-import com.aylfq5.online.tutor.domain.TutorInfo;
 import com.aylfq5.online.tutor.domain.User;
-import com.aylfq5.online.tutor.domain.UserExample;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.IDUtils;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import com.aylfq5.online.tutor.util.Operation;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         // 判断该职工号/学号是否已存在
         User user = userMapper.selectByNumber(record.getNumber());
         if (user != null) {
-            return OnlineTutorResult.build(400,"该职工号/学号已存在!", 0);
+            return OnlineTutorResult.build(400, "该职工号/学号已存在!", 0);
         }
         // 密码和确认密码是否匹配
         if (!record.getPassword().equals(record.getConfirmPassword())) {
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
         PageInfo pageInfo = new PageInfo(userList);
         long total = pageInfo.getTotal();
 
-        return OnlineTutorResult.build(200, "ok",(int) total, userList);
+        return OnlineTutorResult.build(200, "ok", (int) total, userList);
     }
 
     @Override
@@ -134,5 +134,30 @@ public class UserServiceImpl implements UserService {
             return OnlineTutorResult.build(400, "删除失败");
         }
         return OnlineTutorResult.build(200, "删除成功！");
+    }
+
+    @Override
+    public OnlineTutorResult login(User user, Boolean rememberMe) {
+
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getNumber(), user.getPassword(), rememberMe);
+        Subject subject = SecurityUtils.getSubject();
+        String vcode= (String) subject.getSession().getAttribute(CaptchaController.KEY_CAPCHA);
+        if (!vcode.toLowerCase().equals(user.getCode().trim().toLowerCase())) {
+            return OnlineTutorResult.build(400, "验证码错误！");
+        }
+        try {
+            subject.login(token);
+            if (subject.isAuthenticated()) {
+                Session session = subject.getSession();
+                session.setAttribute("user", userMapper.selectByNumber(user.getNumber()));
+            }
+            return OnlineTutorResult.ok();
+        } catch (UnknownAccountException e) {
+            return OnlineTutorResult.build(400, "账号未注册!");
+        } catch (IncorrectCredentialsException e) {
+            return OnlineTutorResult.build(400, "密码不正确!");
+        } catch (AuthenticationException e) {
+            return OnlineTutorResult.build(403, "认证失败!");
+        }
     }
 }

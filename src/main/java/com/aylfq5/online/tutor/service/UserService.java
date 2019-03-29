@@ -33,4 +33,6 @@ public interface UserService {
     OnlineTutorResult getUserList(Integer page, Integer rows, Integer type);
 
     OnlineTutorResult deleteBatch(List<User> userList);
+
+    OnlineTutorResult login(User user, Boolean rememberMe);
 }
