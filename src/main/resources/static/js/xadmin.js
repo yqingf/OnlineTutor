@@ -107,9 +107,8 @@ $(function () {
     })
 
     //左侧菜单效果
-    // $('#content').bind("click",function(event){
-    $('.left-nav #nav li').click(function (event) {
-
+    $('.left-nav #nav li').live("click",function(event){
+    // $('.left-nav #nav li').click(function (event) {
         if($(this).children('.sub-menu').length){
             if($(this).hasClass('open')){
                 $(this).removeClass('open');
@@ -137,7 +136,6 @@ $(function () {
                     return;
                 }
             };
-            
             tab.tabAdd(title,url,index+1);
             tab.tabChange(index+1);
         }

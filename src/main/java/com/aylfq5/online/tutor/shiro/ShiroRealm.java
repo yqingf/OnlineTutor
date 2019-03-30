@@ -2,19 +2,15 @@ package com.aylfq5.online.tutor.shiro;
 
 import com.aylfq5.online.tutor.constant.UserType;
 import com.aylfq5.online.tutor.dao.UserMapper;
-import com.aylfq5.online.tutor.domain.Permission;
 import com.aylfq5.online.tutor.domain.Role;
 import com.aylfq5.online.tutor.domain.User;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -46,17 +42,17 @@ public class ShiroRealm extends AuthorizingRealm {
             authorizationInfo.addStringPermission("*");
         }
 
-        Long userId = user.getId();
-        List<Role> roleList = userMapper.selectAllRoles(userId);
-        user.setRoleList(roleList);
-        for (Role role : roleList) {
-            authorizationInfo.addRole(role.getRole());
-            List<Permission> permList = userMapper.selectAllPermissions(userId);
-            role.setPermList(permList);
-            for (Permission permission : permList) {
-                authorizationInfo.addStringPermission(permission.getPermission());
-            }
-        }
+//        Long userId = user.getId();
+///        List<Role> roleList = userMapper.selectAllRoles(userId);
+//        user.setRoleList(roleList);
+//        for (Role role : roleList) {
+//            authorizationInfo.addRole(role.getRole());
+//            List<Permission> permList = userMapper.selectAllPermissions(userId);
+//            role.setPermList(permList);
+//            for (Permission permission : permList) {
+//                authorizationInfo.addStringPermission(permission.getPermission());
+//            }
+//        }
         return authorizationInfo;
     }
 

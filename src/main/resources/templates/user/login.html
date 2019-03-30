@@ -52,7 +52,8 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button id="submitBtn" class="layui-btn" lay-submit="" lay-filter="login" style="width:220px">立即登录</button>
+                    <button id="submitBtn" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="login" style="width:140px">立即登录</button>
+                    <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm" style="width:60px">重置</button>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -131,6 +132,7 @@
                 }
             }
         });
+
         form.on('submit(login)', function () {
             var url = "[[@{/user/v1/login}]]";
             var number = $("input[name=number]").val();
@@ -155,6 +157,7 @@
             return false;
         });
     });
+
 </script>
 </body>
 </html>

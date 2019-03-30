@@ -21,7 +21,10 @@ body {
     line-height: 1;
     background: #999;
 }
-
+.layui-form-label {
+    font-size: 16px;
+    color: #8D8D8D;
+}
 * {
     margin: 0 auto;
     padding: 0px;
@@ -45,7 +48,7 @@ ul, li {
     color:#fff;
     line-height: 40px;
     border-radius:6px;
-    margin: 0px 0 10px 66px;
+    margin: 0 auto 14px;
 }
 .temp {
     float: left;
@@ -60,6 +63,7 @@ ul, li {
     font-size: 16px;
     filter: alpha(opacity:80);
     opacity: 0.8;
+    padding-top: 16px;
 }
 
 #tab .tab_box input {
@@ -78,9 +82,13 @@ input[type=text], input[type=password] {
     font-size: 16px;
     background: transparent;
 }
-#submitBtn{
-    border-radius: 6px;
+.layui-btn {
+
+!important border-radius: 6px;
+}
+button {
     float: left;
+    margin-bottom: 20px;
 }
 button {
     cursor: pointer;
