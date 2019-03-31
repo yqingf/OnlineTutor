@@ -77,6 +77,10 @@ public class OnlineTutorResult {
         this.data = data;
     }
 
+    public static OnlineTutorResult error() {
+        return OnlineTutorResult.build(-1, "fail！");
+    }
+
 
     public Integer getCode() {
         return code;

@@ -7,6 +7,8 @@ package com.aylfq5.online.tutor.constant;
  * @Version: 1.0
  */
 public class ResponseStatusCode {
+    public static final Integer SUCCESS = 200;
+
     private ResponseStatusCode() {}
 
     /**
