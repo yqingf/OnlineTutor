@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>登录</title>
 </head>
-<link th:href="@{../css/login.css}" rel="stylesheet" rev="stylesheet" type="text/css" media="all"/>
-<link rel="stylesheet" th:href="@{../layui/css/layui.css}"  media="all">
-<script type="text/javascript" th:src="@{../js/jquery-1.8.2.min.js}"></script>
-<script type="text/javascript" th:src="@{../layui/layui.js}"></script>
+<link th:href="@{/css/login.css}" rel="stylesheet" rev="stylesheet" type="text/css" media="all"/>
+<link rel="stylesheet" th:href="@{/layui/css/layui.css}"  media="all">
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 </head>
 <body>
 <div id="tab">
@@ -64,8 +64,7 @@
 </div>
 <div class="bottom">©2019 Leting <a href="javascript:;" target="_blank">关于</a> <span>京ICP证030173号</span> More Templates
     <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a
-            href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a><img width="13" height="16"
-                                                                                      src="images/copy_rignt_24.png"/>
+            href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
 </div>
 <div class="screenbg">
     <ul>
@@ -146,7 +145,7 @@
                 success: function (res) {
                     console.log(res);
                     if(res.code == 200) {
-                        location.href = "/admin/index.html";
+                        location.href = "/index.html";
                     } else {
                         layer.msg(res.msg,{icon: 5});//失败的表情
                         return;

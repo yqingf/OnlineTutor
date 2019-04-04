@@ -14,13 +14,13 @@ import java.util.List;
 public interface UserService {
     OnlineTutorResult deleteByPrimaryKey(Long id);
 
-    OnlineTutorResult insert(User record);
+    OnlineTutorResult insert(User record, String roleIds);
 
     int insertSelective(User record);
 
     OnlineTutorResult selectByPrimaryKey(Long id);
 
-    OnlineTutorResult updateByPrimaryKeySelective(User record);
+    OnlineTutorResult updateByPrimaryKeySelective(User record, String roleIds);
 
     OnlineTutorResult updateByPrimaryKey(User record);
 
@@ -35,4 +35,6 @@ public interface UserService {
     OnlineTutorResult deleteBatch(List<User> userList);
 
     OnlineTutorResult login(User user, Boolean rememberMe);
+
+    User selectByNumber(String number);
 }

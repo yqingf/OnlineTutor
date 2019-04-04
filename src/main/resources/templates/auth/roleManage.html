@@ -4,9 +4,7 @@
 <head th:include="header">
 <script type="text/javascript" src="/js/dateUtils.js"></script>
 <body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
     <!--头-->
-    <div class="layui-body">
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
                 <li id="roleListLi" class="layui-this">角色列表</li>
@@ -25,12 +23,10 @@
                 </div>
             </div>
         </div>
-    </div>
     <!--底部-->
     <script src="/js/auth/roleManage.js"></script>
     <script th:inline="javascript">
         var flag =/*[[${flag==null ?'':flag}]]*/;
     </script>
-</div>
 </body>
 </html>

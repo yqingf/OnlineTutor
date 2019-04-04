@@ -3,8 +3,9 @@
 <head th:include="header">
 <body>
 <div class="x-body">
-    <form class="layui-form">
-        <div class="layui-form-item">
+    <form class="layui-form" action="" method="post" id="userForm">
+        <input type="hidden" id="roleIds" name="roleIds"/>
+        <div class="layui-form-item" >
             <label for="username" class="layui-form-label">
                 <span class="x-red">*</span>姓名
             </label>
@@ -32,7 +33,8 @@
             </div>
             <div class="layui-input-inline">
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img headImage" style="width: 124px; height: 124px;" src="http://t.cn/RCzsdCq" id="avatar">
+                    <img class="layui-upload-img headImage" style="width: 124px; height: 124px;"
+                         src="http://t.cn/RCzsdCq" id="avatar">
                     <p id="demoText"></p>
                 </div>
             </div>
@@ -60,7 +62,8 @@
                 <span class="x-red">*</span>确认密码
             </label>
             <div class="layui-input-inline">
-                <input type="password" id="confirmPassword" name="confirmPassword" required="" lay-verify="confirmPassword"
+                <input type="password" id="confirmPassword" name="confirmPassword" required=""
+                       lay-verify="confirmPassword"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -97,7 +100,7 @@
                        autocomplete="off" class="layui-input">
             </div>
             <div class="layui-input-inline">
-                <input type="hidden"  name="avatar" value=""
+                <input type="hidden" name="avatar" value=""
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -107,6 +110,11 @@
             </label>
             <div class="layui-input-block">
                 <textarea placeholder="请输入内容" id="desc" name="personalProfile" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">授予角色</label>
+            <div class="layui-input-block" id="roleDiv">
             </div>
         </div>
         <div class="layui-form-item">
@@ -120,6 +128,20 @@
     </form>
 </div>
 <script>
+    // 获取系统所有角色
+    $.get("/auth/role/list", function (res) {
+        if (res.code == 200) {
+            $("#roleDiv").empty();
+            $.each(res.data, function (index, item) {
+                var roleInput = $("<input type='checkbox' name='roleId' value=" + item.id + " title=" + item.roleName + " lay-skin='primary'/>");
+                $("#roleDiv").append(roleInput);
+            })
+            //重新渲染下form表单 否则复选框无效
+            layui.form.render('checkbox');
+        }
+    });
+
+
     layui.use(['form', 'layer', 'upload', 'element'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -144,7 +166,7 @@
                 //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
                 /*   console.log(res.data.src);*/
                 window.parent.uploadHeadImage(res.data.src);
-                    var demoText = $('#demoText');
+                var demoText = $('#demoText');
                 demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');
             },
             error: function () {
@@ -165,21 +187,21 @@
             password: [
                 /^[\S]{6,12}$/,
                 '密码在6~12个字符之间，且不能出现空格!'],
-            confirmPassword: function(value) {
+            confirmPassword: function (value) {
                 var password = $("#password").val();
-                if(value != password.trim()){
+                if (value != password.trim()) {
                     return '两次输入的密码不一致!';
                 }
             },
-            expectedNumbers: function(value) {
-                if (value.trim()  == "" || value.trim() == null) {
+            expectedNumbers: function (value) {
+                if (value.trim() == "" || value.trim() == null) {
                     return '预带人数不能为空!';
                 }
             },
             phone: [/^1(3|4|5|7|8)\d{9}$/,
                 '手机号不正确!'],
-            email: function(value) {
-                if(value.trim() != "" && !/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g.test(value)) {
+            email: function (value) {
+                if (value.trim() != "" && !/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g.test(value)) {
                     return "邮箱格式不正确!";
                 }
             }
@@ -188,23 +210,33 @@
 
         //监听提交
         form.on('submit(add)', function (data) {
+            var array = new Array();
+            $(".layui-form-checked").each(function () {
+                array.push($(this).prev().val());
+            });
+            //校验是否授权
+            var roleIds = array.join(",");
+            console.log("roleIds" + roleIds);
+            if (roleIds == null || roleIds == '') {
+                layer.alert("请给该用户添加角色！")
+                return false;
+            }
+            $("#roleIds").val(roleIds);
             var url = "[[@{/user/v1}]]";
-            var param = data.field;
             $.ajax({
                 url: url,
                 type: "post",
-                data:param,//表格数据序列化
+                data: $("#userForm").serialize(),//表格数据序列化
                 success: function (res) {
-                    console.log(res);
-                    if(res.code == 200) {
+                    if (res.code == 200) {
                         layer.msg(res.msg, {
                             icon: 6,//成功的表情
                             time: 2000 //1秒关闭（如果不配置，默认是3秒）
-                        }, function(){
+                        }, function () {
                             location.reload();
                         });
                     } else {
-                        layer.msg(res.msg,{icon: 5});//失败的表情
+                        layer.msg(res.msg, {icon: 5});//失败的表情
                         return;
                     }
                 }

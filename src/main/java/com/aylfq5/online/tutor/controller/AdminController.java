@@ -36,7 +36,7 @@ public class AdminController {
     @PostMapping("createUser")
     @ResponseBody
     public OnlineTutorResult createUser(User user) {
-        OnlineTutorResult result = userService.insert(user);
+        OnlineTutorResult result = userService.insert(user, null);
         return result;
     }
 

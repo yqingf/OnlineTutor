@@ -1,8 +1,16 @@
 package com.aylfq5.online.tutor.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
+/**
+* @Description:
+* @Author:         aylfq5
+* @CreateDate:     2019/4/2 14:12
+* @Version:        1.0
+*/
 public class Role implements Serializable {
     private Long id;
 
@@ -12,11 +20,16 @@ public class Role implements Serializable {
 
     private String code;
 
-    private Integer insertUid;
+    private Long insertUid;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     private Date updateTime;
+
+    private List<RolePermissionKey> rolePerms;
+
+    private Boolean checked;
 
     private static final long serialVersionUID = 1L;
 
@@ -52,11 +65,11 @@ public class Role implements Serializable {
         this.code = code == null ? null : code.trim();
     }
 
-    public Integer getInsertUid() {
+    public Long getInsertUid() {
         return insertUid;
     }
 
-    public void setInsertUid(Integer insertUid) {
+    public void setInsertUid(Long insertUid) {
         this.insertUid = insertUid;
     }
 
@@ -74,5 +87,21 @@ public class Role implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<RolePermissionKey> getRolePerms() {
+        return rolePerms;
+    }
+
+    public void setRolePerms(List<RolePermissionKey> rolePerms) {
+        this.rolePerms = rolePerms;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
     }
 }

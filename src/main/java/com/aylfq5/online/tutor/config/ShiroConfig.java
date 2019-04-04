@@ -14,7 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @Description:
@@ -22,7 +25,7 @@ import java.util.LinkedHashMap;
  * @CreateDate: 2019/3/29 10:51
  * @Version: 1.0
  */
-//@Configuration
+@Configuration
 public class ShiroConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(ShiroRealm.class);
@@ -32,26 +35,36 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 设置securityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
+
+
         // 登录页面
         shiroFilterFactoryBean.setLoginUrl("/user/toLogin.html");
         // 首页
-        shiroFilterFactoryBean.setSuccessUrl("/admin/index.html");
+        shiroFilterFactoryBean.setSuccessUrl("/index.html");
         // 未认证页面
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/logout", "logout");
+        filterChainDefinitionMap.put("/", "user");
+
         // 静态文件，设置不拦截
+        filterChainDefinitionMap.put("/403.html", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/fonts/**", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
         filterChainDefinitionMap.put("/layui/**", "anon");
         filterChainDefinitionMap.put("/admin/welcome.html", "anon");
-        filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/", "anon");
         filterChainDefinitionMap.put("/captcha/random", "anon");
         filterChainDefinitionMap.put("/user/v1/login", "anon");
-        filterChainDefinitionMap.put("/**", "user");
+        filterChainDefinitionMap.put("/index.html", "anon");
+
+        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/*/*", "authc");
+        filterChainDefinitionMap.put("/*/*/*", "authc");
+        filterChainDefinitionMap.put("/*/*/*/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;

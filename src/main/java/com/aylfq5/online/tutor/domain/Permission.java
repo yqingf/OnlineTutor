@@ -3,12 +3,18 @@ package com.aylfq5.online.tutor.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+* @Description:    ${description}
+* @Author:         aylfq5
+* @CreateDate:     2019/4/2 9:45
+* @Version:        1.0
+*/
 public class Permission implements Serializable {
     private Long id;
 
     private String name;
 
-    private Integer parentId;
+    private Long parentId;
 
     private Integer zindex;
 
@@ -25,6 +31,8 @@ public class Permission implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+    /**是否选中*/
+    private Boolean checked;
 
     private static final long serialVersionUID = 1L;
 
@@ -44,11 +52,11 @@ public class Permission implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
@@ -114,5 +122,13 @@ public class Permission implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
     }
 }

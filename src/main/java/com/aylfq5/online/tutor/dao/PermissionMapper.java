@@ -29,4 +29,6 @@ public interface PermissionMapper {
     int updateByPrimaryKey(Permission record);
 
     List<Permission> getUserPerms(Long id);
+
+    List<Permission> selectByRoleId(Long roleId);
 }

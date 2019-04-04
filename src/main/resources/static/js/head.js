@@ -8,14 +8,14 @@ $(function () {
     layui.use('element', function () {
         var element = layui.element;
         // 左侧导航区域（可配合layui已有的垂直导航）
-        $.get("/auth/getUserPerms", function (data) {
+        $.get("/auth/user/perms", function (data) {
             if (data != null) {
                 getMenus(data);
                 element.render('nav');
             } else {
                 layer.alert("权限不足，请联系管理员", function () {
                     //退出
-                    window.location.href = "/logout";
+                    window.location.href = "/user/logout";
                 });
             }
         });
@@ -29,9 +29,9 @@ var getMenus = function (data) {
         var node = data[index];
         if (node.type == 0) {
             if (node.parentId == 0) {
-                var li = $("<li id='li'></li>");
+                var li = $("<li></li>");
                 var a = $("<a href='javascript:;'></a>");
-                var i = $("<i class='iconfont'>&#xe6b8;</i>")
+                var i = $("<i class='iconfont'>"+node.icon+"</i>")
                 var i1 = $('<i class="iconfont nav_right">&#xe697;</i>');
                 var cate = $("<cite>" + node.name + "</cite>");
                 a.append(i);

@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.aylfq5.online.tutor.dao.RolePermissionMapper" >
-  <resultMap id="BaseResultMap" type="com.aylfq5.online.tutor.domain.RolePermissionKey" >
-    <id column="permit_id" property="permitId" jdbcType="BIGINT" />
-    <id column="role_id" property="roleId" jdbcType="BIGINT" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="com.aylfq5.online.tutor.domain.RolePermissionKey" >
-    delete from role_permission
-    where permit_id = #{permitId,jdbcType=BIGINT}
-      and role_id = #{roleId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.RolePermissionKey" >
-    insert into role_permission (permit_id, role_id)
-    values (#{permitId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.aylfq5.online.tutor.domain.RolePermissionKey" >
-    insert into role_permission
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="permitId != null" >
-        permit_id,
-      </if>
-      <if test="roleId != null" >
-        role_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="permitId != null" >
-        #{permitId,jdbcType=BIGINT},
-      </if>
-      <if test="roleId != null" >
-        #{roleId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
+<mapper namespace="com.aylfq5.online.tutor.dao.RolePermissionMapper">
+    <resultMap id="BaseResultMap" type="com.aylfq5.online.tutor.domain.RolePermissionKey">
+        <id column="permit_id" property="permitId" jdbcType="BIGINT"/>
+        <id column="role_id" property="roleId" jdbcType="BIGINT"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="com.aylfq5.online.tutor.domain.RolePermissionKey">
+        delete
+        from role_permission
+        where permit_id = #{permitId,jdbcType=BIGINT}
+          and role_id = #{roleId,jdbcType=BIGINT}
+    </delete>
+    <select id="getPermsByRoleId" resultType="com.aylfq5.online.tutor.domain.RolePermissionKey">
+      select permit_id permitId, role_id roleId from role_permission where role_id = #{id}
+    </select>
+    <insert id="insert" parameterType="com.aylfq5.online.tutor.domain.RolePermissionKey">
+        insert into role_permission (permit_id, role_id)
+        values (#{permitId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.aylfq5.online.tutor.domain.RolePermissionKey">
+        insert into role_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="permitId != null">
+                permit_id,
+            </if>
+            <if test="roleId != null">
+                role_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="permitId != null">
+                #{permitId,jdbcType=BIGINT},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
 </mapper>

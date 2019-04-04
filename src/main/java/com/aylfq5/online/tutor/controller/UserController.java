@@ -3,6 +3,7 @@ package com.aylfq5.online.tutor.controller;
 import com.aylfq5.online.tutor.domain.User;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class UserController {
      * @param id
      * @return
      */
+    @RequiresRoles("superman")
     @DeleteMapping("/v1/{id}")
     @ResponseBody
     public OnlineTutorResult delete(@PathVariable String id) {
@@ -63,8 +65,8 @@ public class UserController {
      */
     @PostMapping("/v1")
     @ResponseBody
-    public OnlineTutorResult insert(User user) {
-        OnlineTutorResult result = userService.insert(user);
+    public OnlineTutorResult insert(User user, String roleIds) {
+        OnlineTutorResult result = userService.insert(user, roleIds);
         return result;
     }
     /**
@@ -75,8 +77,8 @@ public class UserController {
      */
     @PutMapping("/v1")
     @ResponseBody
-    public OnlineTutorResult update(User user) {
-        OnlineTutorResult result = userService.updateByPrimaryKeySelective(user);
+    public OnlineTutorResult update(User user, String roleIds) {
+        OnlineTutorResult result = userService.updateByPrimaryKeySelective(user, roleIds);
         return result;
     }
     @PostMapping("/v1/login")
@@ -89,7 +91,7 @@ public class UserController {
     @RequestMapping("/logout")
     public String logout() {
 
-        return "/user/toLogin.html";
+        return "redirect:/user/toLogin.html";
     }
 
 }

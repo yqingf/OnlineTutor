@@ -47,6 +47,8 @@ public class User implements Serializable {
     private String code;
     /**教研成果*/
     private String achievements;
+    /**版本*/
+    private Integer version;
     /**
      * 角色
      */
@@ -224,6 +226,14 @@ public class User implements Serializable {
 
     public void setAchievements(String achievements) {
         this.achievements = achievements == null ? null : achievements.trim();
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public List<Role> getRoleList() {

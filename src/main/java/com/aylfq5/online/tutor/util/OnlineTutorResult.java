@@ -81,6 +81,10 @@ public class OnlineTutorResult {
         return OnlineTutorResult.build(-1, "fail！");
     }
 
+    public static OnlineTutorResult error(String msg) {
+        return OnlineTutorResult.build(-1, msg);
+    }
+
 
     public Integer getCode() {
         return code;

@@ -3,7 +3,8 @@
 <head th:include="header">
 <body>
 <div class="x-body">
-    <form class="layui-form">
+    <form class="layui-form" id="userForm">
+        <input type="hidden" id="roleIds" name="roleIds" />
         <div class="layui-form-item">
             <label for="username" class="layui-form-label">
                 <span class="x-red">*</span>姓名
@@ -132,6 +133,11 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">授予角色</label>
+            <div class="layui-input-block" id="roleDiv">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">
             </label>
             <button class="layui-btn" lay-filter="add" lay-submit="">
@@ -142,6 +148,18 @@
     </form>
 </div>
 <script>
+    // 获取系统所有角色
+    $.get("/auth/role/list", function (res) {
+        if (res.code == 200) {
+            $("#roleDiv").empty();
+            $.each(res.data, function (index, item) {
+                var roleInput = $("<input type='checkbox' name='roleId' value=" + item.id + " title=" + item.roleName + " lay-skin='primary'/>");
+                $("#roleDiv").append(roleInput);
+            })
+            //重新渲染下form表单 否则复选框无效
+            layui.form.render('checkbox');
+        }
+    });
     layui.use(['form', 'layer', 'upload', 'element'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -210,12 +228,23 @@
 
         //监听提交
         form.on('submit(add)', function (data) {
+            var array = new Array();
+            $(".layui-form-checked").each(function () {
+                array.push($(this).prev().val());
+            });
+            //校验是否授权
+            var roleIds = array.join(",");
+            console.log("roleIds" + roleIds);
+            if (roleIds == null || roleIds == '') {
+                layer.alert("请给该用户添加角色！")
+                return false;
+            }
+            $("#roleIds").val(roleIds);
             var url = "[[@{/user/v1}]]";
-            var param = data.field;
             $.ajax({
                 url: url,
                 type: "post",
-                data:param,//表格数据序列化
+                data: $("#userForm").serialize(),//表格数据序列化
                 success: function (res) {
                     console.log(res);
                     if(res.code == 200) {

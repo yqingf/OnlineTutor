@@ -3,7 +3,7 @@
 <body>
 <div th:fragment="role">
 
-    <form id="roleForm" class="layui-form" action="=" method="post">
+    <form id="roleForm" class="layui-form" action="" method="post">
         <input type="hidden" id="permIds" name="permIds"/>
         <div class="layui-form-item">
             <div class="layui-inline">
@@ -25,7 +25,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">角色描述：</label>
             <div class="layui-input-block">
-                <input type="text" name="descpt" lay-verify="" placeholder="" autocomplete="off" class="layui-input"/>
+                <input type="text" name="description" lay-verify="" placeholder="" autocomplete="off" class="layui-input"/>
             </div>
         </div>
         <div class="layui-form-item">
@@ -43,7 +43,7 @@
         </div>
     </form>
     <script src="/js/auth/role.js"></script>
-
+    <script src="/js/layui-xtree.js"></script>
 </div>
 </body>
 </html>

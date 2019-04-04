@@ -1,5 +1,7 @@
 package com.aylfq5.online.tutor.controller;
 
+import com.aylfq5.online.tutor.domain.Role;
+import com.aylfq5.online.tutor.service.RoleService;
 import com.aylfq5.online.tutor.service.StudentService;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description: 学生管理Controller
@@ -26,6 +29,8 @@ public class StudentController {
     private StudentService studentService;
     @Resource
     private UserService userService;
+    @Resource
+    private RoleService roleService;
 
     @RequestMapping("add.html")
     public String toTutorAdd() {
@@ -55,6 +60,9 @@ public class StudentController {
     @GetMapping("/v1/edit/{id}")
     public String toEdit(@PathVariable String id, Model model) {
         OnlineTutorResult result = userService.selectByPrimaryKey(Long.parseLong(id));
+        // 查询所有角色
+        List<Role> roleList = roleService.selectByUserId(id);
+        model.addAttribute("roleList", roleList);
         model.addAttribute("result", result.getData());
         return "/student/edit";
     }
@@ -75,4 +83,5 @@ public class StudentController {
         OnlineTutorResult result = userService.getUserList(page, rows, type);
         return result;
     }
+
 }

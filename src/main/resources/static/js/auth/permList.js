@@ -4,7 +4,7 @@
 $(function () {
     //初始化treegrid 页面表格
     layui.config({
-        base: '../treegrid/'
+        base: '../../treegrid/'
     }).use(['laytpl', 'treegrid'], function () {
         var laytpl = layui.laytpl,
             treegrid = layui.treegrid;
@@ -31,7 +31,7 @@ $(function () {
             $.ajax({
                 type: "POST",
                 data: $("#permForm").serialize(),
-                url: "/auth/updatePerm",
+                url: "/auth/permission/update",
                 success: function (res) {
                     if (res.code == 200) {
                         layer.alert(res.msg, function () {
@@ -56,7 +56,7 @@ function edit(id, type) {
     if (null != id) {
         $("#type").val(type);
         $("#id").val(id);
-        $.get("/auth/getPerm", {"permId": id}, function (data) {
+        $.get("/auth/permission/detail", {"permId": id}, function (data) {
             // console.log(data);
             if (null != data.data) {
                 $("input[name='name']").val(data.data.name);
@@ -87,7 +87,7 @@ function edit(id, type) {
 
 //开通权限
 function addPerm(pid, flag) {
-    if (null != pid) {
+    /*if (null != pid) {
         //flag[0:开通权限；1：新增子节点权限]
         //type[0:编辑；1：新增]
         if (flag == 0) {
@@ -110,7 +110,12 @@ function addPerm(pid, flag) {
                 location.reload();
             }
         });
+    }*/
+    $("#parentId").val(pid);
+    if (flag == 0) {
+        $("#parentId").val(0);
     }
+    x_admin_show("添加权限", "/auth/permission/add.html/"+$("#parentId").val());
 }
 
 function del(id, name) {

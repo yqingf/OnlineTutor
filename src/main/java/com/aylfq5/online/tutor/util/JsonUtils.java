@@ -35,9 +35,9 @@ public class JsonUtils {
 
     /**
      * 将json结果集转化为对象
-     *
-     * @param jsonData json数据
-     * @param clazz 对象中的object类型
+     * @param jsonData
+     * @param beanType
+     * @param <T>
      * @return
      */
     public static <T> T jsonToPojo(String jsonData, Class<T> beanType) {

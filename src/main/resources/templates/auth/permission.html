@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='favorites'"></head>
+<head th:include="header">
 <body>
     <section th:fragment="authorize">
         <div class="layui-body">
@@ -9,7 +9,8 @@
             <legend>开通权限</legend>
         </fieldset>
 
-        <form class="layui-form" action="">
+        <form class="layui-form" action="" id="permForm">
+            <input id="parentId" type="hidden" name="parentId" th:value="${parentId}"/>
             <div class="layui-form-item">
                 <label class="layui-form-label">名称</label>
                 <div class="layui-input-block">
@@ -17,16 +18,15 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">编号</label>
+                <label class="layui-form-label">权限code</label>
                 <div class="layui-input-block">
                     <input type="text" name="code" lay-verify="required" placeholder="请输入编号，用于权限校验时使用；比如：adduser:添加用户权限" autocomplete="off" class="layui-input"/>
                 </div>
             </div>
-
             <div class="layui-form-item">
                 <label class="layui-form-label">权限类型</label>
                 <div class="layui-input-block">
-                    <select name="istype" lay-filter="aihao">
+                    <select name="type" lay-filter="type">
                         <option value="0">菜单</option>
                         <option value="1">功能</option>
                     </select>
@@ -44,48 +44,60 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">优先级</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="zindex" lay-verify="required|phone" autocomplete="off" class="layui-input"/>
+                        <input type="text" name="zindex" lay-verify="required" autocomplete="off" class="layui-input"/>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">图标名称</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="icon" lay-verify="email" autocomplete="off" class="layui-input"/>
+                        <input type="text" name="icon" lay-verify="" autocomplete="off" class="layui-input"/>
                     </div>
                 </div>
             </div>
-
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">描述</label>
                 <div class="layui-input-block">
-                    <textarea name="descpt" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    <textarea name="description" placeholder="请输入内容" class="layui-textarea"></textarea>
                 </div>
             </div>
-            <!--<div class="layui-form-item layui-form-text">
-              <label class="layui-form-label">编辑器</label>
-              <div class="layui-input-block">
-                <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
-              </div>
-            </div>-->
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                    <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>
         </form>
-            <script src="../layui/layui.js"></script>
-        <!--<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
         <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
         <script type='text/javascript'>
             layui.use('form', function(){
                 var form = layui.form;
+                form.on('submit(submit)', function (data) {
+                    //校验 TODO
+                    $.ajax({
+                        type: "POST",
+                        data: $("#permForm").serialize(),
+                        url: "/auth/permission/add",
+                        success: function (res) {
+                            if (res.code == 200) {
+                                layer.alert(res.msg, function () {
+                                    layer.closeAll();
+                                    location.reload();
+                                    window.location.href = "/auth/permission/list.html";//自定义
+                                });
+                            } else {
+                                layer.alert(res.msg);
+                            }
+                        },
+                        error: function (res) {
+                            layer.alert("操作请求错误，请您稍后再试");
+                        }
+                    });
+                    return false;
+                });
                 form.render();
             });
         </script>
         </div>
     </section>
 </body>
-<script type='text/javascript'>
-</script>
 </html>
