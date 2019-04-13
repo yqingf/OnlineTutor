@@ -9,22 +9,41 @@
 <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
 <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 </head>
+<script type="text/javascript">
+    $(function(){
+        $(".screenbg ul li").each(function(){
+            $(this).css("opacity","0");
+        });
+        $(".screenbg ul li:first").css("opacity","1");
+        var index = 0;
+        var t;
+        var li = $(".screenbg ul li");
+        var number = li.length;
+        function change(index){
+            li.css("visibility","visible");
+            li.eq(index).siblings().animate({opacity:0},3000);
+            li.eq(index).animate({opacity:1},3000);
+        }
+        function show(){
+            index = index + 1;
+            if(index<=number-1){
+                change(index);
+            }else{
+                index = 0;
+                change(index);
+            }
+        }
+        setInterval(show,2000);
+        //根据窗口宽度生成图片宽度
+        var width = $(window).width();
+        $(".screenbg ul img").css("width",width+"px");
+    });
+</script>
 <body>
 <div id="tab">
-
     <div class="tab_box">
         <div class="title">在线导师双向选择系统</div>
         <form class="layui-form" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">身份</label>
-                <div class="layui-input-inline">
-                    <select name="userType" lay-filter="user-type">
-                        <option value="0" >学生</option>
-                        <option value="1" >教职工</option>
-                        <option value="2" >管理员</option>
-                    </select>
-                </div>
-            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span id="span">学号</span></label>
                 <div class="layui-input-block">
@@ -61,10 +80,6 @@
             </div>
         </form>
     </div>
-</div>
-<div class="bottom">©2019 Leting <a href="javascript:;" target="_blank">关于</a> <span>京ICP证030173号</span> More Templates
-    <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a
-            href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
 </div>
 <div class="screenbg">
     <ul>
@@ -157,6 +172,36 @@
         });
     });
 
+</script>
+<script type="text/javascript">
+    $(function(){
+        $(".screenbg ul li").each(function(){
+            $(this).css("opacity","0");
+        });
+        $(".screenbg ul li:first").css("opacity","1");
+        var index = 0;
+        var t;
+        var li = $(".screenbg ul li");
+        var number = li.length;
+        function change(index){
+            li.css("visibility","visible");
+            li.eq(index).siblings().animate({opacity:0},3000);
+            li.eq(index).animate({opacity:1},3000);
+        }
+        function show(){
+            index = index + 1;
+            if(index<=number-1){
+                change(index);
+            }else{
+                index = 0;
+                change(index);
+            }
+        }
+        setInterval(show,2000);
+        //根据窗口宽度生成图片宽度
+        var width = $(window).width();
+        $(".screenbg ul img").css("width",width+"px");
+    });
 </script>
 </body>
 </html>
