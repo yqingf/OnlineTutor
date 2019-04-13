@@ -7,7 +7,7 @@
         <a href="">首页</a>
         <a href="">演示</a>
         <a>
-          <cite>导航元素</cite></a>
+          <cite>组合查询</cite></a>
       </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -16,23 +16,27 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <input type="text" id="name" name="name" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+            <input id="number" type="text" name="number" placeholder="学号" autocomplete="off" class="layui-input">
+            <div class="layui-input-inline">
+                <select name="gender" id="gender">
+                    <option value="">性别</option>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </div>
+            <input id="direction" type="text" name="direction" placeholder="专业" autocomplete="off" class="layui-input">
+            <input id="office" type="text" name="office" placeholder="班级" autocomplete="off" class="layui-input">
+            <button id="search" type="button" class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <xblock>
-
-        </button>
-    </xblock>
 </div>
 <table class="layui-table" lay-filter="student-list" id="student-table"></table>
-
 </div>
 <script>
-    layui.use(['laydate', 'table'], function () {
+    layui.use(['laydate', 'table','form'], function () {
         var table = layui.table;
+        var form = layui.form;
         var laydate = layui.laydate;
         //执行一个laydate实例
         laydate.render({
@@ -52,19 +56,19 @@
             loading: true,
             skin: 'row',
             even: true,
+            id: "searchReload",
             toolbar: '#headerBar',
             cols: [
                 [
                     {type: 'checkbox'},
-                    {field: 'id', title: 'ID',  sort: true},
+                    {field: 'id', title: 'ID',  sort: true, hide: true},
                     {field: 'name', title: '姓名',  sort: true},
                     {field: 'gender', title: '性别',  sort: true, templet: '#sexTpl'},
                     {field: 'number', title: '学号', sort: true},
                     {field: 'cellphone', title: '电话', sort: true,},
-                    {field: 'qq', title: 'QQ', sort: true, align: 'right'},
-                    {field: 'email', title: '电子邮箱', sort: true, align: 'right'},
-                    {field: 'personalProfile',  title: '个人简介'},
-                    {fixed: 'right', title: '操作', toolbar: '#rowDemo', width: 150, align: 'right'}
+                    {field: 'direction', title: '专业', sort: true},
+                    {field: 'office', title: '班级', sort: true},
+                    {fixed: 'right', title: '操作', toolbar: '#rowDemo', width: 200, align: 'center'}
                 ]
             ],
             request: {
@@ -110,12 +114,28 @@
                     layer.close(index);
                 });
             } else if (layEvent === 'update') { //编辑
-                x_admin_show('学生编辑', '[[@{/student/v1/edit/}]]' + data.id);
+                x_admin_show('学生编辑', '[[@{/admin/student/edit/}]]' + data.id);
                 obj.update({
                     username: '123'
                     , title: 'xxx'
                 });
             }
+        });
+        $("#search").on("click",function() {
+            table.reload('searchReload', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                //根据条件查询
+                where: {
+                    type: 1,
+                    name: $('#name').val(),
+                    number: $("#number").val(),
+                    office: $("#office").val(),
+                    gender: $("#gender").val(),
+                    direction: $("#direction").val()
+                }
+            });
         });
     });
 </script>
@@ -125,6 +145,10 @@
     {{#  } else if( d.gender === 2 ) { }}
     <span style="color: #F581B1;">{{ '女' }}</span>
     {{#  } }}
+</script>
+<script id="switchTpl" type="text/html">
+    <input type="checkbox" name="{{d.name}}" value={{d.id}} lay-skin="switch" lay-text="启用|停用"
+           lay-filter="switchSelected" {{ d.status== 0 ? "checked" : "" }}/>
 </script>
 <script type="text/html" id="rowDemo">
     <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看</button>

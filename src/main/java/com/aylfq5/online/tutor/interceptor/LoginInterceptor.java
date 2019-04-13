@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -72,10 +73,9 @@ public class LoginInterceptor implements HandlerInterceptor {
                 SecurityUtils.getSubject().logout();
 //                isAjaxResponse(request, response);
                 if (RequestUtil.getRequestType(request) == 2) {
-                    response.sendRedirect(request.getContextPath() + kickoutUrl);
                     RequestUtil.out(response, OnlineTutorResult.build(UserStatusMsg.SystemStatus.UPDATE.getCode(), "您的信息或权限已变更，重新登录后生效！"));
                 } else {
-
+                    response.sendRedirect(request.getContextPath() + kickoutUrl);
                 }
             }
         }

@@ -1,9 +1,11 @@
 package com.aylfq5.online.tutor.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.aylfq5.online.tutor.shiro.ShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -11,13 +13,11 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @Description:
@@ -42,7 +42,7 @@ public class ShiroConfig {
         // 首页
         shiroFilterFactoryBean.setSuccessUrl("/index.html");
         // 未认证页面
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/403.html");
 
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/logout", "logout");
@@ -56,12 +56,12 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/images/**", "anon");
         filterChainDefinitionMap.put("/layui/**", "anon");
         filterChainDefinitionMap.put("/admin/welcome.html", "anon");
-        filterChainDefinitionMap.put("/", "anon");
+//        filterChainDefinitionMap.put("/", "anon");
         filterChainDefinitionMap.put("/captcha/random", "anon");
         filterChainDefinitionMap.put("/user/v1/login", "anon");
         filterChainDefinitionMap.put("/index.html", "anon");
 
-        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "user");
         filterChainDefinitionMap.put("/*/*", "authc");
         filterChainDefinitionMap.put("/*/*/*", "authc");
         filterChainDefinitionMap.put("/*/*/*/**", "authc");
@@ -130,5 +130,33 @@ public class ShiroConfig {
         shiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         logger.info("shiroRealm注入成功...");
         return shiroRealm;
+    }
+
+    /**
+     * ShiroDialect，为了在thymeleaf里使用shiro的标签的bean
+     * @return
+     */
+    @Bean
+    public ShiroDialect shiroDialect(){
+        return new ShiroDialect();
+    }
+    /**
+     * @描述：开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证
+     * 配置以下两个bean(DefaultAdvisorAutoProxyCreator和AuthorizationAttributeSourceAdvisor)即可实现此功能
+     * </br>Enable Shiro Annotations for Spring-configured beans. Only run after the lifecycleBeanProcessor(保证实现了Shiro内部lifecycle函数的bean执行) has run
+     * </br>不使用注解的话，可以注释掉这两个配置
+     * @return
+     */
+    @Bean
+    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
+        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        advisorAutoProxyCreator.setProxyTargetClass(true);
+        return advisorAutoProxyCreator;
+    }
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
     }
 }

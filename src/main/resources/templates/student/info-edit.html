@@ -11,23 +11,13 @@
 <body>
 <div class="x-body">
     <form class="layui-form" id="userForm">
-        <input type="hidden" id="roleIds" name="roleIds"/>
         <div class="layui-form-item">
             <label for="username" class="layui-form-label">
                 <span class="x-red">*</span>姓名
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="username" name="name" required="" lay-verify="username" th:value="${result.name}"
+                <input type="text" id="username" name="name" readonly lay-verify="username" th:value="${result.name}"
                        autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>性别
-            </label>
-            <div class="layui-input-block">
-                <input type="radio" name="gender" value="1" title="男" th:field="*{result.gender}">
-                <input type="radio" name="gender" value="2" title="女" th:field="*{result.gender}">
             </div>
         </div>
         <div class="layui-form-item">
@@ -50,25 +40,7 @@
                 <span class="x-red">*</span>学号
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="number" name="number" required="" lay-verify="required" th:value="${result.number}"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="direction" class="layui-form-label">
-                <span class="x-red">*</span>专业
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="direction" name="direction" required=""  th:value="${result.direction}"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="office" class="layui-form-label">
-                <span class="x-red">*</span>班级
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="office" name="office" required="" th:value="${result.office}"
+                <input type="text" id="number" name="number" readonly lay-verify="required" th:value="${result.number}"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -109,7 +81,7 @@
                        autocomplete="off" class="layui-input">
             </div>
             <div class="layui-input-inline">
-                <input type="hidden" id="avatar-url" name="avatar" value=""
+                <input type="hidden" id="avatar-url"  name="avatar" value=""
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -119,6 +91,14 @@
             </label>
             <div class="layui-input-block">
                 <textarea placeholder="请输入内容" id="tutorExpectation" name="tutorExpectation" th:text="${result.tutorExpectation}" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label for="direction" class="layui-form-label">
+                专业方向
+            </label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" id="direction" name="direction" th:text="${result.direction}" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -146,10 +126,6 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">授予角色</label>
-            <div class="layui-input-block" id="roleDiv"></div>
-        </div>
-        <div class="layui-form-item">
             <label class="layui-form-label">
             </label>
             <button class="layui-btn" lay-filter="add" lay-submit="">
@@ -159,20 +135,7 @@
         </div>
     </form>
 </div>
-<script th:inline="javascript">
-    var roleList = [[${roleList}]];
-
-</script>
 <script>
-    $("#roleDiv").empty();
-    $.each(roleList, function (index, item) {
-        var roleInput = $("<input type='checkbox' name='roleId' value=" + item.id + " title=" + item.roleName + " lay-skin='primary'/>");
-        $("#roleDiv").append(roleInput);
-        if(item.checked) {
-            $("input[name=roleId]").eq(index).prop("checked",true);
-        }
-    });
-
     layui.use(['form', 'layer', 'upload', 'element'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -240,22 +203,10 @@
 
         //监听提交
         form.on('submit(add)', function (data) {
-            var array = new Array();
-            $(".layui-form-checked").each(function () {
-                array.push($(this).prev().val());
-            });
-            //校验是否授权
-            var roleIds = array.join(",");
-            console.log("roleIds" + roleIds);
-            if (roleIds == null || roleIds == '') {
-                layer.alert("请给该用户添加角色！")
-                return false;
-            }
-            $("#roleIds").val(roleIds);
-            var url = "[[@{/user/v1}]]";
+            var url = "[[@{/student/v1}]]";
             $.ajax({
                 url: url,
-                type: "put",
+                type: "PUT",
                 data: $("#userForm").serialize(),//表格数据序列化
                 success: function (res) {
                     console.log(res);

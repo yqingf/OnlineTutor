@@ -245,11 +245,14 @@ public class UserExample {
             return (Criteria) this;
         }
 
-        public Criteria andGenderEqualTo(Boolean value) {
+        public Criteria andGenderEqualTo(Integer value) {
             addCriterion("gender =", value, "gender");
             return (Criteria) this;
         }
-
+        public Criteria andStatusEqualTo(Integer value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
         public Criteria andGenderNotEqualTo(Boolean value) {
             addCriterion("gender <>", value, "gender");
             return (Criteria) this;
@@ -294,7 +297,6 @@ public class UserExample {
             addCriterion("gender not between", value1, value2, "gender");
             return (Criteria) this;
         }
-
         public Criteria andAvatarIsNull() {
             addCriterion("avatar is null");
             return (Criteria) this;
@@ -515,7 +517,7 @@ public class UserExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeEqualTo(Boolean value) {
+        public Criteria andUserTypeEqualTo(Integer value) {
             addCriterion("user_type =", value, "userType");
             return (Criteria) this;
         }

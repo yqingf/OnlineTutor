@@ -1,8 +1,11 @@
 package com.aylfq5.online.tutor.controller;
 
 import com.aylfq5.online.tutor.domain.User;
+import com.aylfq5.online.tutor.entity.UserDTO;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,6 +60,7 @@ public class UserController {
         OnlineTutorResult result = userService.deleteBatch(userList);
         return result;
     }
+
     /**
      * 添加用户
      *
@@ -69,6 +73,7 @@ public class UserController {
         OnlineTutorResult result = userService.insert(user, roleIds);
         return result;
     }
+
     /**
      * 修改用户信息
      *
@@ -81,6 +86,14 @@ public class UserController {
         OnlineTutorResult result = userService.updateByPrimaryKeySelective(user, roleIds);
         return result;
     }
+
+    /**
+     * 登录
+     *
+     * @param user
+     * @param rememberMe
+     * @return
+     */
     @PostMapping("/v1/login")
     @ResponseBody
     public OnlineTutorResult login(User user, Boolean rememberMe) {
@@ -88,10 +101,38 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 退出
+     *
+     * @return
+     */
     @RequestMapping("/logout")
     public String logout() {
-
+        SecurityUtils.getSubject().logout();
         return "redirect:/user/toLogin.html";
     }
 
+    /**
+     * 启用/停用
+     * @param user
+     * @return
+     */
+    @PostMapping("/update/status")
+    @ResponseBody
+    public OnlineTutorResult updateStatus(User user) {
+        OnlineTutorResult result = userService.updateStatus(user);
+        return result;
+    }
+
+    /**
+     * 修改密码
+     * @param userDTO
+     * @return
+     */
+    @PutMapping("/update/password")
+    @ResponseBody
+    public OnlineTutorResult updatePassword(UserDTO userDTO) {
+        OnlineTutorResult result = userService.updatePassword(userDTO);
+        return result;
+    }
 }

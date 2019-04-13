@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header">
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+          <cite>导航元素</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            <input class="layui-input" placeholder="开始日" name="start" id="start">
+            <input class="layui-input" placeholder="截止日" name="end" id="end">
+            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+    <xblock>
+
+        </button>
+    </xblock>
+</div>
+<table class="layui-table" lay-filter="student-list" id="student-table"></table>
+</div>
+<script>
+    var pageCurr;
+    layui.use(['laydate', 'table', 'form'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+        tableIns = table.render({
+            elem: '#student-table',
+            url: '[[@{/tutor/student/list}]]',
+            method: 'GET',
+            loading: true,
+            skin: 'row',
+            even: true,
+            toolbar: true,
+            cols: [
+                [
+                    {field: 'id', title: 'ID', hide: true},
+                    {field: 'name', title: '姓名',align: 'center',event: 'nameClick', style:'cursor: pointer;'},
+                    {field: 'gender', title: '性别',align: 'center', templet: "#genTpl"},
+                    {field: 'number', title: '学号',align: 'center',sort: true},
+                    {field: 'direction', title: '专业',align: 'center', sort: true},
+                    {field: 'office', title: '班级',align: 'center', sort: true},
+                    {field: 'cellphone', title: '手机号', sort: true}
+                ]
+            ],
+            response: {
+                statusName: 'code', //规定数据状态的字段名称，默认：code
+                statusCode: 200, //规定成功的状态码，默认：0
+                msgName: 'msg', //规定状态信息的字段名称，默认：msg
+                countName: 'count', //规定数据总数的字段名称，默认：count
+                dataName: 'data', //规定数据列表的字段名称，默认：data
+            }
+        });
+        // 监听行事件
+        table.on("tool(student-list)", function (obj) {
+            var data = obj.data;
+            if (obj.event === 'nameClick') {
+                x_admin_show("学生信息","[[@{/student/v1/}]]" + data.id)
+            }
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+    });
+</script>
+<script id="genTpl" type="text/html">
+    {{#  if(d.gender === 1){ }}
+    <span style="color: #1d98f7;">{{ '男' }}</span>
+    {{#  } else if( d.gender === 2 ) { }}
+    <span style="color: #F581B1;">{{ '女' }}</span>
+    {{#  } }}
+</script>
+</body>
+</html>

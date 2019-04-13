@@ -68,6 +68,7 @@
                 <input type="text" id="number" name="number" required="" lay-verify="required"
                        autocomplete="off" class="layui-input" oninput="value=value.replace(/[^\d]/g,'')">
             </div>
+            <div class="layui-form-mid layui-word-aux">用作登录唯一账号，需保证唯一性！</div>
         </div>
         <div class="layui-form-item">
             <label for="password" class="layui-form-label">
@@ -120,7 +121,7 @@
                        autocomplete="off" class="layui-input">
             </div>
             <div class="layui-input-inline">
-                <input type="hidden"  name="avatar" value=""
+                <input type="hidden" id="avatar-url" name="avatar" value=""
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -167,7 +168,7 @@
             element = layui.element;
         var uploadInst = upload.render({
             elem: '#headImg',
-            url: '/upload/headImg',
+            url: '[[@{/qi/niu/upload}]]',
             size: 500,
             before: function (obj) {
                 //预读本地文件示例，不支持ie8
@@ -177,14 +178,13 @@
             },
             done: function (res) {
                 //如果上传失败
-                if (res.code > 0) {
+                if (res.code != 200) {
                     return layer.msg('上传失败');
                 }
                 //上传成功
-                //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
-                /*   console.log(res.data.src);*/
-                window.parent.uploadHeadImage(res.data.src);
-                    var demoText = $('#demoText');
+                $("#avatar-url").val(res.data.key);
+                console.log(res.data.key);
+                var demoText = $('#demoText');
                 demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');
             },
             error: function () {

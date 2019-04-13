@@ -18,13 +18,15 @@ public class StudentVolunteer implements Serializable {
     /**导师ID*/
     private Long tutorId;
     /**志愿等级*/
-    private Boolean volunteerLevel;
+    private Integer volunteerLevel;
     /**处理状态:1-未处理, 2-已驳回, 3-已接受*/
     private Integer volunteerStatus;
     /**创建时间*/
     private Date createTime;
     /**修改时间*/
     private Date updateTime;
+    /**版本号*/
+    private Integer version;
 
     private static final long serialVersionUID = 1L;
 
@@ -52,11 +54,11 @@ public class StudentVolunteer implements Serializable {
         this.tutorId = tutorId;
     }
 
-    public Boolean getVolunteerLevel() {
+    public Integer getVolunteerLevel() {
         return volunteerLevel;
     }
 
-    public void setVolunteerLevel(Boolean volunteerLevel) {
+    public void setVolunteerLevel(Integer volunteerLevel) {
         this.volunteerLevel = volunteerLevel;
     }
 
@@ -82,5 +84,13 @@ public class StudentVolunteer implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

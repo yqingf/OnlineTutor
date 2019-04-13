@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header">
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+          <cite>导航元素</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            <input class="layui-input" placeholder="开始日" name="start" id="start">
+            <input class="layui-input" placeholder="截止日" name="end" id="end">
+            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+</div>
+<table class="layui-table" lay-filter="tutor-list" id="tutor-table"></table>
+</div>
+<script>
+    var pageCurr;
+    layui.use(['laydate', 'table', 'form'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+        var tableIns = table.render({
+            elem: '#tutor-table',
+            url: '[[@{/student/tutor/list}]]',
+            method: 'GET',
+            page: {theme: '#009688'},
+            limit: 10,
+            limits: [10, 20, 30, 50, 100],
+            loading: true,
+            skin: 'row',
+            even: true,
+            toolbar: true,
+            cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: '姓名', event: 'nameClick', style:'cursor: pointer;'},
+                    {field: 'expectedNumbers', title: '预带人数', sort: true},
+                    {field: 'volunteerNumbers', title: '志愿填报人数', sort: true},
+                    {field: 'selectedNumbers', title: '已确认人数', sort: true},
+                    {field: 'checked', title: '选择', align: 'center', templet: "#switchTpl"}
+                ]
+            ],
+            request: {
+                pageName: 'page',
+                limitName: 'rows'
+            },
+            response: {
+                statusName: 'code', //规定数据状态的字段名称，默认：code
+                statusCode: 200, //规定成功的状态码，默认：0
+                msgName: 'msg', //规定状态信息的字段名称，默认：msg
+                countName: 'count', //规定数据总数的字段名称，默认：count
+                dataName: 'data', //规定数据列表的字段名称，默认：data
+            },
+            done: function(res, curr, count){
+            pageCurr=curr;
+        }
+        });
+        //监听指定开关
+        form.on('switch(switchSelected)', function (obj) {
+            switchSelected(obj, this.value, this.name, obj.elem.checked);
+        });
+        // 监听行事件
+        table.on("tool(tutor-list)", function (obj) {
+            var data = obj.data;
+            if (obj.event === 'nameClick') {
+                x_admin_show("导师信息","[[@{/tutor/v1/}]]" + data.id)
+            }
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+    });
+</script>
+<script id="switchTpl" type="text/html">
+    <input type="checkbox" name="{{d.name}}" value={{d.id}} lay-skin="switch" lay-text="已选择|未选择"
+           lay-filter="switchSelected" {{ d.checked== 1 ? 'checked' : '' }}  />
+</script>
+<script type="text/javascript">
+    function ajax(url, obj, isAsync, type) {
+        $.ajax({
+            url: url,
+            data: obj,
+            contentType: 'application/json;charset=UTF-8',
+            type: type,
+            success: function (res) {
+                if (res.code == 200) {
+                    layer.msg(res.msg, {
+                        icon: 6,
+                        time: 2000
+                    })
+                    location.reload(true);
+                } else {
+                    layer.msg(res.msg, {
+                        icon: 5,
+                        time: 2000
+                    })
+                }
+            }
+        });
+    }
+    function switchSelected(obj, id, name, checked) {
+        var isChecked = checked ? 1 : 2;
+        var selectedStatus = checked ? "选择" : "取消选择";
+        layer.confirm('您确定' + selectedStatus + name + '导师吗？', {
+            btn: ['确认', '返回']
+        }, function () {
+            $.post("/student/choose/mentor", {"id": id, "checked": isChecked}, function (res) {
+                if (isLogin(res)) {
+                    if (res.code = 200) {
+                        //回调弹框
+                        layer.alert(res.msg, function () {
+                            layer.close(layer.index);
+                            //加载load方法
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.alert(res.msg, function () {
+                            layer.close(layer.index);
+                            //加载load方法
+                            window.location.reload();
+                        });
+                    }
+                }
+            });
+        }, function () {
+            layer.close(layer.index);
+            window.location.reload();
+        });
+    };
+</script>
+</body>
+</html>

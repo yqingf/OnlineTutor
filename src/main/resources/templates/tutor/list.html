@@ -7,7 +7,7 @@
         <a href="">首页</a>
         <a href="">演示</a>
         <a>
-          <cite>导航元素</cite></a>
+          <cite>组合查询</cite></a>
       </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -16,36 +16,48 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <input type="text" id="name" name="name" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+            <input id="number" type="text" name="number" placeholder="教师号" autocomplete="off" class="layui-input">
+            <div class="layui-input-inline">
+                <select name="gender" id="gender">
+                    <option value="">性别</option>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="professionalTitle" id="professionalTitle">
+                    <option value="">职称</option>
+                    <option value="助教">助教</option>
+                    <option value="讲师">讲师</option>
+                    <option value="教授">教授</option>
+                    <option value="副教授">副教授</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="status" id="status">
+                    <option value="">状态</option>
+                    <option value="0">启用</option>
+                    <option value="1">停用</option>
+                </select>
+            </div>
+            <button id="search" type="button" class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <xblock>
-
-        </button>
-    </xblock>
 </div>
 <table class="layui-table" lay-filter="tutor-list" id="tutor-table"></table>
-
 </div>
 <script>
-    layui.use(['laydate', 'table'], function () {
-        var table = layui.table;
-        var laydate = layui.laydate;
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
-        });
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
-        });
-        table.render({
+    layui.use(['laydate', 'table', 'form'], function () {
+        var table = layui.table,
+            form = layui.form,
+            $ = layui.$;
+        var tableIns = table.render({
             elem: '#tutor-table',
             url: '[[@{/tutor/list}]]',
-            method: 'get',
+            method: 'GET',
+            async: false,
+            id: "searchReload",
             page: {theme: '#009637'},
             limit: 10,
             limits: [10, 20, 30, 50, 100],
@@ -56,17 +68,15 @@
             cols: [
                 [
                     {type: 'checkbox'},
-                    {field: 'id', title: 'ID', width: '10%', sort: true},
-                    {field: 'name', title: '姓名', width: '10%', sort: true},
-                    {field: 'gender', title: '性别', width: '5%', sort: true, templet: '#sexTpl'},
-                    {field: 'professionalTitle', width: '5%', title: '职称'},
-                    {field: 'expectedNumbers', width: '10%', title: '预带人数'},
-                    {field: 'number', title: '教师号', width: '10%', sort: true},
-                    {field: 'cellphone', title: '电话', width: '10%', sort: true,},
-                    {field: 'qq', title: 'QQ', width: '10%', sort: true, align: 'right'},
-                    {field: 'email', title: '电子邮箱', width: '10%', sort: true, align: 'right'},
-                    {field: 'personalProfile', width: '20%', title: '个人简介'},
-                    {fixed: 'right', title: '操作', toolbar: '#rowDemo', width: 150, align: 'right'}
+                    {field: 'id', title: 'ID'},
+                    {field: 'name', title: '姓名', sort: true},
+                    {field: 'gender', title: '性别', sort: true, templet: '#sexTpl'},
+                    {field: 'professionalTitle', title: '职称'},
+                    {field: 'expectedNumbers', title: '预带人数'},
+                    {field: 'number', title: '教师号', sort: true},
+                    {field: 'cellphone', title: '电话', sort: true,},
+                    {field: 'status', title: '状态', sort: true, align: 'center', templet: "#switchTpl"},
+                    {fixed: 'right', title: '操作', toolbar: '#rowDemo', width: 200, align: 'center'}
                 ]
             ],
             request: {
@@ -92,12 +102,16 @@
                     break;
                 case 'deleteBatch':
                     layer.confirm('确认删除选中的数据吗?', function (index) {
-                        ajax("[[@{/user/v1}]]",JSON.stringify(checkStatus),null,"DELETE");
+                        ajax("[[@{/user/v1}]]", JSON.stringify(checkStatus), null, "DELETE");
                         checkStatus.del();
                         layer.close(index);
                     });
                     break;
             }
+        });
+        //监听指定开关
+        form.on('switch(switchSelected)', function (obj) {
+            switchSelected(obj, this.value, this.name, obj.elem.checked);
         });
         table.on('tool(tutor-list)', function (obj) {
             var data = obj.data; //获得当前行数据
@@ -120,6 +134,22 @@
                 });
             }
         });
+        $("#search").on("click",function() {
+            tableIns.reload(/*'searchReload',*/ {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                //根据条件查询
+                where: {
+                    type: 2,
+                    name: $('#name').val(),
+                    number: $("#number").val(),
+                    professionalTitle: $("#professionalTitle").val(),
+                    gender: $("#gender").val(),
+                    status: $("#status").val()
+                }
+            });
+        });
     });
 </script>
 <script type="text/html" id="sexTpl">
@@ -128,6 +158,10 @@
     {{#  } else if( d.gender === 2 ) { }}
     <span style="color: #F581B1;">{{ '女' }}</span>
     {{#  } }}
+</script>
+<script id="switchTpl" type="text/html">
+    <input type="checkbox" name="{{d.name}}" value={{d.id}} lay-skin="switch" lay-text="启用中|已停用"
+           lay-filter="switchSelected" {{ d.status== 0 ? "checked" : "" }}/>
 </script>
 <script type="text/html" id="rowDemo">
     <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看</button>
@@ -140,11 +174,39 @@
     </button>
 </script>
 <script type="text/javascript">
+    function switchSelected(obj, id, name, checked) {
+        var isChecked = checked ? 0 : 1;
+        var selectedStatus = checked ? "启用" : "停用";
+        layer.confirm('您确定' + selectedStatus + name + '导师吗？', {
+            btn: ['确认', '返回']
+        }, function () {
+            $.post("/user/update/status", {"id": id, "status": isChecked}, function (res) {
+                if (res.code = 200) {
+                    //回调弹框
+                    layer.alert(res.msg, function () {
+                        layer.close(layer.index);
+                        //加载load方法
+                        window.location.reload();
+                    });
+                } else {
+                    layer.alert(res.msg, function () {
+                        layer.close(layer.index);
+                        //加载load方法
+                        window.location.reload();
+                    });
+                }
+            });
+        }, function () {
+            layer.close(layer.index);
+            window.location.reload();
+        });
+    };
+
     function ajax(url, obj, isAsync, type) {
         $.ajax({
             url: url,
             data: obj,
-            contentType:'application/json;charset=UTF-8',
+            contentType: 'application/json;charset=UTF-8',
             type: type,
             success: function (res) {
                 if (res.code == 200) {

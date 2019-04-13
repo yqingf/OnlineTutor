@@ -50,6 +50,10 @@ public class User implements Serializable {
     /**版本*/
     private Integer version;
     /**
+     * 状态 0-启用，1-停用
+     */
+    private Integer status;
+    /**
      * 角色
      */
     private List<Role> roleList;
@@ -234,6 +238,14 @@ public class User implements Serializable {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public List<Role> getRoleList() {

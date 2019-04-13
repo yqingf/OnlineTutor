@@ -9,14 +9,16 @@ $(function () {
         var element = layui.element;
         // 左侧导航区域（可配合layui已有的垂直导航）
         $.get("/auth/user/perms", function (data) {
-            if (data != null) {
-                getMenus(data);
-                element.render('nav');
-            } else {
-                layer.alert("权限不足，请联系管理员", function () {
-                    //退出
-                    window.location.href = "/user/logout";
-                });
+            if (isLogin(data)) {
+                if (data != null) {
+                    getMenus(data);
+                    element.render('nav');
+                } else {
+                    layer.alert("权限不足，请联系管理员", function () {
+                        //退出
+                        window.location.href = "/user/logout";
+                    });
+                }
             }
         });
     });
@@ -31,7 +33,7 @@ var getMenus = function (data) {
             if (node.parentId == 0) {
                 var li = $("<li></li>");
                 var a = $("<a href='javascript:;'></a>");
-                var i = $("<i class='iconfont'>"+node.icon+"</i>")
+                var i = $("<i class='iconfont'>" + node.icon + "</i>")
                 var i1 = $('<i class="iconfont nav_right">&#xe697;</i>');
                 var cate = $("<cite>" + node.name + "</cite>");
                 a.append(i);
@@ -79,7 +81,17 @@ function updateUsePwd() {
         fixed: false,
         resize: false,
         shadeClose: true,
-        area: ['450px'],
-        content: $('#useDetail')
+        offset: ['100px'],
+        area: ["400px", "280px"],
+        content: $('#updatePassword')
     });
+}
+function isLogin(result){
+    if(result && result.code && (result.code == 1100 || result.code==1102)){
+        layer.alert(result.msg, function () {
+            // 退出
+            window.location.href = "/user/logout";
+        });
+    }
+    return true;//返回true
 }

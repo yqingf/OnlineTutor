@@ -1,6 +1,8 @@
 package com.aylfq5.online.tutor.service;
 
+import com.aylfq5.online.tutor.domain.Condition;
 import com.aylfq5.online.tutor.domain.User;
+import com.aylfq5.online.tutor.entity.UserDTO;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 
 import java.util.List;
@@ -25,16 +27,19 @@ public interface UserService {
     OnlineTutorResult updateByPrimaryKey(User record);
 
     /**
-     * 获取用户列表
-     *
-     * @param type 用户类型(1-学生, 2-导师, 3-管理员)
+     * 按条件获取用户列表
+     * @param condition
      * @return
      */
-    OnlineTutorResult getUserList(Integer page, Integer rows, Integer type);
+    OnlineTutorResult getUserList(Condition condition);
 
     OnlineTutorResult deleteBatch(List<User> userList);
 
     OnlineTutorResult login(User user, Boolean rememberMe);
 
     User selectByNumber(String number);
+
+    OnlineTutorResult updateStatus(User user);
+
+    OnlineTutorResult updatePassword(UserDTO userDTO);
 }

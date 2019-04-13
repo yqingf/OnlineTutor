@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header">
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+          <cite>导航元素</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            <input class="layui-input" placeholder="开始日" name="start" id="start">
+            <input class="layui-input" placeholder="截止日" name="end" id="end">
+            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+    <xblock>
+
+        </button>
+    </xblock>
+</div>
+<table class="layui-table" lay-filter="volunteer-list" id="tutor-table"></table>
+</div>
+<script>
+    var pageCurr;
+    layui.use(['laydate', 'table', 'form'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+        var tableIns = table.render({
+            elem: '#tutor-table',
+            url: '[[@{/tutor/volunteer/list}]]',
+            method: 'GET',
+            skin: 'row',
+            even: true,
+            toolbar: true,
+            cols: [
+                [
+                    {field: 'id', title: 'ID', hide:true},
+                    {field: 'version', title: '版本', hide:true},
+                    {field: 'name', title: '学生姓名'},
+                    {field: 'direction', title: '专业', sort: true},
+                    {field: 'office', title: '所在班级', sort: true},
+                    {field: 'volunteerSequences', title: '志愿序列', sort: true},
+                    {field: 'status', title: '志愿状态', sort: true, templet: '#volunteerStatusTpl'},
+                    {fixed: 'right', title: '操作', toolbar: '#rowDemo', align: 'center'}
+                ]
+            ],
+            response: {
+                statusName: 'code', //规定数据状态的字段名称，默认：code
+                statusCode: 200, //规定成功的状态码，默认：0
+                msgName: 'msg', //规定状态信息的字段名称，默认：msg
+                countName: 'count', //规定数据总数的字段名称，默认：count
+                dataName: 'data', //规定数据列表的字段名称，默认：data
+            }
+        });
+        table.on('tool(volunteer-list)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            if (obj.event == 'view') {
+                x_admin_show("学生详情", '/student/v1/'+data.id);
+                return;
+            }
+            var status = obj.event == 'refuse' ? 2 : 3;
+            var msg = obj.event == 'refuse' ? "拒绝" : "接受";
+            var version = data.version;
+            if (status == 2 || status == 3) { //拒绝或同意
+                layer.confirm('确认'+ msg + data.name + '同学的申请吗？该操作不可撤销！', function (index) {
+                    // 向服务端发送删除指令
+                    $.post("/tutor/choose/student", {"id": data.id, "status": status, "version": version}, function (res) {
+                        if (res.code == 200) {
+                            layer.msg(res.msg, {
+                                icon: 6,
+                                time: 2000
+                            })
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            location.reload(true);
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 5,
+                                time: 2000
+                            })
+                        }
+                    });
+
+                });
+            }
+        });
+    });
+</script>
+<script type="text/html" id="rowDemo">
+    {{#  if(d.status == 1){ }}
+    <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
+    <a class="layui-btn  layui-btn-xs layui-btn-normal" lay-event="receive">接受</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refuse">拒绝</a>
+    {{# }if(d.status == 2) { }}
+    <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
+    {{# }if(d.status == 3) { }}
+    <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
+    {{#  } }}
+</script>
+<script type="text/html" id="volunteerStatusTpl">
+    {{#  if(d.status === 1){ }}
+    <span style="color: #1d98f7;">{{ '待处理' }}</span>
+    {{#  } else if( d.status === 2 ) { }}
+    <span style="color: #F581B1;">{{ '已拒绝' }}</span>
+    {{#  } else if( d.status === 3 ) { }}
+    <span style="color: #4BE076;">{{ '已同意' }}</span>
+    {{#  } }}
+</script>
+<script type="text/javascript">
+    function ajax(url, obj, isAsync, type) {
+        $.ajax({
+            url: url,
+            data: obj,
+            contentType: 'application/json;charset=UTF-8',
+            type: type,
+            success: function (res) {
+                if (res.code == 200) {
+                    layer.msg(res.msg, {
+                        icon: 6,
+                        time: 2000
+                    })
+                    location.reload(true);
+                } else {
+                    layer.msg(res.msg, {
+                        icon: 5,
+                        time: 2000
+                    })
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

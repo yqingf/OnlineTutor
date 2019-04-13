@@ -1,15 +1,17 @@
 package com.aylfq5.online.tutor.controller;
 
+import com.aylfq5.online.tutor.domain.Role;
 import com.aylfq5.online.tutor.domain.User;
+import com.aylfq5.online.tutor.service.RoleService;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import com.aylfq5.online.tutor.util.Operation;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description:
@@ -18,11 +20,15 @@ import javax.annotation.Resource;
  * @Version: 1.0
  */
 @Controller
-@RequestMapping("admin")
+@RequestMapping("/admin")
 public class AdminController {
 
     @Resource
     private UserService userService;
+    @Resource
+    private RoleService roleService;
+
+
     @Operation("后台首页")
     @RequestMapping("index.html")
     public String index() {
@@ -33,12 +39,21 @@ public class AdminController {
         return "admin/welcome";
     }
 
-    @PostMapping("createUser")
-    @ResponseBody
-    public OnlineTutorResult createUser(User user) {
-        OnlineTutorResult result = userService.insert(user, null);
-        return result;
+
+    /**
+     * 跳转到修改页面
+     *
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/student/edit/{id}")
+    public String toEdit(@PathVariable Long id, Model model) {
+        OnlineTutorResult result = userService.selectByPrimaryKey(id);
+        // 查询所有角色
+        List<Role> roleList = roleService.selectByUserId(id);
+        model.addAttribute("roleList", roleList);
+        model.addAttribute("result", result.getData());
+        return "/student/edit";
     }
-
-
 }

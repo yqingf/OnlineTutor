@@ -50,7 +50,6 @@ public class ShiroRealm extends AuthorizingRealm {
             authorizationInfo.addRole("*");
             authorizationInfo.addStringPermission("*");
         }
-
         Long userId = user.getId();
         // 获取用户所有角色
         List<Role> roleList = roleMapper.selectByUserId(userId);

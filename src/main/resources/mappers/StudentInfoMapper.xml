@@ -20,7 +20,13 @@
     from student_info
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <select id="getTutorList" resultType="com.aylfq5.online.tutor.entity.TutorDTO">
+      select id,name,expected_numbers expectedNumbers, version
+      from user
+      where status = 0
+      and user_type = 2
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from student_info
     where id = #{id,jdbcType=BIGINT}
   </delete>

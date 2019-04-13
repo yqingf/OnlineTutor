@@ -24,6 +24,7 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -84,9 +85,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, gender, avatar, number, password, user_type userType, cellphone, qq, email, personal_profile personalProfile,
-    direction, specialties, tutor_expectation tutorExpectation, professional_title professionalTitle, selected_numbers selectedNumbers,
-    expected_numbers expectedNumbers, office, achievements, create_time, update_time, version
+    id, name, gender, avatar, number, password, user_type , cellphone, qq, email, personal_profile,
+    direction, specialties, tutor_expectation , professional_title , selected_numbers ,
+    expected_numbers , office, achievements, create_time, update_time, version, status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.aylfq5.online.tutor.domain.UserExample" >
     select
@@ -103,7 +104,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultType="com.aylfq5.online.tutor.domain.User" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select
       <include refid="Base_Column_List" />
     from user
@@ -277,31 +278,25 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-    <select id="getUserList" resultType="com.aylfq5.online.tutor.domain.User">
+    <select id="getUserList" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List" />
       from user
       where user_type = #{type,jdbcType=BIGINT}
     </select>
-  <select id="selectByNumber" resultType="com.aylfq5.online.tutor.domain.User">
+  <select id="selectByNumber" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from user
     where number = #{number,jdbcType=BIGINT}
   </select>
-    <select id="selectByPrimaryAndNumber" resultType="com.aylfq5.online.tutor.domain.User">
+    <select id="selectByPrimaryAndNumber" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from user
         where number = #{number,jdbcType=BIGINT}
         and id <![CDATA[ <> ]]> #{id, jdbcType=VARCHAR}
     </select>
-    <select id="selectAllRoles" resultType="com.aylfq5.online.tutor.domain.Role">
-      select id, user_id userId, role, description from role where user_id = #{userId}
-    </select>
-  <select id="selectAllPermissions" resultType="com.aylfq5.online.tutor.domain.Permission">
-      select p.id, p.role_id roleId, p.permission from permission p join role r on p.role_id = r.id where r.user_id = #{userId}
-  </select>
   <update id="updateByExampleSelective" parameterType="map" >
     update user
     <set >
@@ -462,6 +457,9 @@
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

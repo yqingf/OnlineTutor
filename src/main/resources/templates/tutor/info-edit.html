@@ -11,13 +11,12 @@
 <body>
 <div class="x-body">
     <form class="layui-form" id="userForm">
-        <input type="hidden" id="roleIds" name="roleIds"/>
         <div class="layui-form-item">
             <label for="username" class="layui-form-label">
                 <span class="x-red">*</span>姓名
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="username" name="name" required="" lay-verify="username" th:value="${result.name}"
+                <input type="text" id="username" name="name" readonly lay-verify="username" th:value="${result.name}"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -46,38 +45,61 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label for="professionalTitle" class="layui-form-label">
+                <span class="x-red">*</span>职称
+            </label>
+            <div class="layui-input-inline">
+                <select name="professionalTitle" readonly id="professionalTitle">
+                    <option value="助教" th:selected="${result.professionalTitle eq '助教'}">助教</option>
+                    <option value="讲师" th:selected="${result.professionalTitle eq '讲师'}">讲师</option>
+                    <option value="副教授" th:selected="${result.professionalTitle eq '副教授'}">副教授</option>
+                    <option value="教授" th:selected="${result.professionalTitle eq '教授<'}">教授</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="expectedNumbers" class="layui-form-label">
+                <span class="x-red">*</span>预带人数
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="expectedNumbers" name="expectedNumbers"  lay-verify="expectedNumbers"
+                       autocomplete="off" class="layui-input" oninput="value=value.replace(/[^\d]/g,'')" th:value="${result.expectedNumbers}">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label for="number" class="layui-form-label">
-                <span class="x-red">*</span>学号
+                <span class="x-red">*</span>职工号
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="number" name="number" required="" lay-verify="required" th:value="${result.number}"
-                       autocomplete="off" class="layui-input">
+                <input type="text" id="number" name="number" readonly lay-verify="required"
+                       autocomplete="off" class="layui-input" th:value="${result.number}">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label for="direction" class="layui-form-label">
-                <span class="x-red">*</span>专业
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="direction" name="direction" required=""  th:value="${result.direction}"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="office" class="layui-form-label">
-                <span class="x-red">*</span>班级
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="office" name="office" required="" th:value="${result.office}"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
+
         <div class="layui-form-item">
             <label for="phone" class="layui-form-label">
                 <span class="x-red">*</span>手机号
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="phone" name="cellphone" required="" lay-verify="phone" th:value="${result.cellphone}"
+                <input type="text" id="phone" name="cellphone"  lay-verify="phone"
+                       autocomplete="off" class="layui-input" th:value="${result.cellphone}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="office" class="layui-form-label">
+                办公室
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="office" name="office"  lay-verify=""
+                       autocomplete="off" class="layui-input" th:value="${result.office}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="direction" class="layui-form-label">
+                研究方向
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="direction" name="direction"  lay-verify="direction" th:value="${result.direction}"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -86,7 +108,7 @@
                 <span class="x-red"></span>QQ
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="qq" name="qq" required="" th:value="${result.qq}"
+                <input type="text" id="qq" name="qq"  th:value="${result.qq}"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -95,13 +117,13 @@
                 <span class="x-red"></span>邮箱
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="email" name="email" required="" lay-verify="email" th:value="${result.email}"
+                <input type="text" id="email" name="email"  lay-verify="email" th:value="${result.email}"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-inline">
-                <input type="hidden" id="userType" name="userType" value="1"
+                <input type="hidden" id="userType" name="userType" value="2"
                        autocomplete="off" class="layui-input">
             </div>
             <div class="layui-input-inline">
@@ -114,27 +136,27 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
-            <label for="tutorExpectation" class="layui-form-label">
-                导师期望
+            <label for="desc" class="layui-form-label">
+                主讲课程
             </label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="tutorExpectation" name="tutorExpectation" th:text="${result.tutorExpectation}" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入内容" id="specialties" name="specialties" class="layui-textarea" th:text="${result.specialties}"></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
-            <label for="specialties" class="layui-form-label">
-                专业特长
+            <label for="desc" class="layui-form-label">
+                学生要求
             </label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="specialties" name="specialties" th:text="${result.specialties}" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入内容" id="tutorExpectation" name="tutorExpectation" th:text="${result.tutorExpectation}" class="layui-textarea" ></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
-            <label for="achievements" class="layui-form-label">
-                个人荣誉
+            <label for="desc" class="layui-form-label">
+                教研成果
             </label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="achievements" name="achievements" th:text="${result.achievements}" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入内容" id="achievements" name="achievements" th:text="${result.achievements}" class="layui-textarea" ></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -142,12 +164,8 @@
                 个人简介
             </label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="desc" name="personalProfile" th:text="${result.personalProfile}" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入内容" id="desc" name="personalProfile" th:text="${result.personalProfile}" class="layui-textarea" ></textarea>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">授予角色</label>
-            <div class="layui-input-block" id="roleDiv"></div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
@@ -159,20 +177,7 @@
         </div>
     </form>
 </div>
-<script th:inline="javascript">
-    var roleList = [[${roleList}]];
-
-</script>
 <script>
-    $("#roleDiv").empty();
-    $.each(roleList, function (index, item) {
-        var roleInput = $("<input type='checkbox' name='roleId' value=" + item.id + " title=" + item.roleName + " lay-skin='primary'/>");
-        $("#roleDiv").append(roleInput);
-        if(item.checked) {
-            $("input[name=roleId]").eq(index).prop("checked",true);
-        }
-    });
-
     layui.use(['form', 'layer', 'upload', 'element'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -182,6 +187,7 @@
             elem: '#headImg',
             url: '[[@{/qi/niu/upload}]]',
             size: 500,
+            accept: "images",
             before: function (obj) {
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
@@ -194,6 +200,7 @@
                     return layer.msg('上传失败');
                 }
                 //上传成功
+                //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
                 $("#avatar-url").val(res.data.key);
                 console.log(res.data.key);
                 var demoText = $('#demoText');
@@ -240,19 +247,7 @@
 
         //监听提交
         form.on('submit(add)', function (data) {
-            var array = new Array();
-            $(".layui-form-checked").each(function () {
-                array.push($(this).prev().val());
-            });
-            //校验是否授权
-            var roleIds = array.join(",");
-            console.log("roleIds" + roleIds);
-            if (roleIds == null || roleIds == '') {
-                layer.alert("请给该用户添加角色！")
-                return false;
-            }
-            $("#roleIds").val(roleIds);
-            var url = "[[@{/user/v1}]]";
+            var url = "[[@{/tutor/v1}]]";
             $.ajax({
                 url: url,
                 type: "put",
@@ -265,13 +260,13 @@
                             time: 2000 //1秒关闭（如果不配置，默认是3秒）
                         }, function(){
                             x_admin_close();
-                            location.reload();
                         });
                     } else {
                         layer.msg(res.msg,{icon: 5});//失败的表情
                         return;
                     }
                 }
+
             });
             return false;
         });

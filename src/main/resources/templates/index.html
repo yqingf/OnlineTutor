@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:replace="header">
 <body>
 <!-- 顶部开始 -->
@@ -20,11 +21,13 @@
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">admin</a>
+            <a href="javascript:;">
+                <shiro:principal property="name"></shiro:principal>
+            </a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
                 <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
-                <dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-                <dd><a href="./login.html">退出</a></dd>
+                <dd><a onclick="updateUsePwd()">修改密码</a></dd>
+                <dd><a th:href="@{/user/logout}">退出</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item to-index"><a href="/">前台首页</a></li>
@@ -59,6 +62,87 @@
 </div>
 <!-- 底部结束 -->
 </body>
-<script>
+<div class="modify-pwd-layer aux-self" id="updatePassword" style="display: none; ">
+    <form id="userForm" class="layui-form" action="" style="margin: 20px auto;">
+        <div class="layui-form-item">
+            <label for="password" class="layui-form-label">
+                <span class="x-red">*</span>原密码
+            </label>
+            <div class="layui-input-inline">
+                <input id="password" type="password"  name="password" required="" lay-verify="password"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="newPassword" class="layui-form-label">
+                <span class="x-red">*</span>新密码
+            </label>
+            <div class="layui-input-inline">
+                <input type="password" id="newPassword" name="newPassword" required="" lay-verify="password"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="confirmPassword" class="layui-form-label">
+                <span class="x-red">*</span>确认密码
+            </label>
+            <div class="layui-input-inline">
+                <input id="confirmPassword" type="password" name="confirmPassword" required="" lay-verify="confirmPassword"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+            </label>
+            <button class="layui-btn layui-btn-sm" lay-filter="update" lay-submit="">
+                确认
+            </button>
+            <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+        </div>
+    </form>
+</div>
+<script >
+    layui.use(['form', 'layer', 'upload', 'element'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        //自定义验证规则
+        form.verify({
+            password: [
+                /^[\S]{6,12}$/,
+                '密码在6~12个字符之间，且不能出现空格!'],
+            confirmPassword: function (value) {
+                var password = $("#newPassword").val();
+                if (value != password.trim()) {
+                    return '两次输入的密码不一致!';
+                }
+            }
+
+        });
+        //监听提交
+        form.on('submit(update)', function (data) {
+            var url = "[[@{/user/update/password}]]";
+            $.ajax({
+                url: url,
+                type: "PUT",
+                data: $("#userForm").serialize(),//表格数据序列化
+                success: function (res) {
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {
+                            icon: 6,//成功的表情
+                            time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                        },function() {
+                            location.parent.reload();
+                        });
+                    } else {
+                        layer.msg(res.msg, {icon: 5});//失败的表情
+                        return;
+                    }
+                }
+
+            });
+            return false;
+        });
+
+    });
 </script>
 </html>
