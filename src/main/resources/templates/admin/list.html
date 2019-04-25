@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header">
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+          <cite>组合查询</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            <input type="text" id="name" name="name" placeholder="请输入导师姓名" autocomplete="off" class="layui-input">
+            <input id="number" type="text" name="number" placeholder="导师手机号" autocomplete="off" class="layui-input">
+            <button id="search" type="button" class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i>
+            </button>
+        </form>
+    </div>
+</div>
+<table class="layui-table" lay-filter="tutor-list" id="tutor-table"></table>
+</div>
+<script>
+    layui.use(['laydate', 'table', 'form'], function () {
+        var table = layui.table,
+            form = layui.form,
+            $ = layui.$;
+        var tableIns = table.render({
+            elem: '#tutor-table',
+            url: '[[@{/admin/double/selected/result}]]',
+            method: 'GET',
+            async: false,
+            id: "searchReload",
+            page: {theme: '#009637'},
+            limit: 10,
+            limits: [10, 20, 30, 50, 100],
+            loading: true,
+            skin: 'row',
+            even: true,
+            toolbar: '#headerBar',
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'tutorId', title: 'ID', hide: true},
+                    {field: 'stuId', title: 'ID', hide: true},
+                    {field: 'tutorname', title: '导师姓名', sort: true},
+                    {field: 'tutorphone', title: '导师电话'},
+                    {field: 'stuname', title: '学生姓名'},
+                    {field: 'office', title: '学生班级'},
+                    {field: 'stuphone', title: '学生电话'}
+
+                ]
+            ],
+            request: {
+                pageName: 'page',
+                limitName: 'rows'
+            },
+            where: {
+                "type": 2
+            },
+            response: {
+                statusName: 'code', //规定数据状态的字段名称，默认：code
+                statusCode: 200, //规定成功的状态码，默认：0
+                msgName: 'msg', //规定状态信息的字段名称，默认：msg
+                countName: 'count', //规定数据总数的字段名称，默认：count
+                dataName: 'data', //规定数据列表的字段名称，默认：data
+            },
+        })
+        $("#search").on("click", function () {
+            tableIns.reload(/*'searchReload',*/ {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                //根据条件查询
+                where: {
+                    name: $('#name').val(),
+                    number: $("#number").val()
+                }
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

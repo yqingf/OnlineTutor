@@ -84,6 +84,19 @@
         where sv.tutor_id = #{tutorId}
           and sv.volunteer_status = 3
     </select>
+    <select id="getDoubleSelectionResult" resultType="com.aylfq5.online.tutor.entity.DoubleSelectedResult">
+        select u.id stuId, u.name stuname,u.office, u.cellphone stuphone, u1.id tutorId, u1.name tutorname, u1.cellphone tutorphone
+        from student_volunteer s
+                 join user u on u.id = s.student_id
+                 join user u1 on u1.id = s.tutor_id
+        where s.volunteer_status = 3
+        <if test="condition.name != null and condition.name != '' ">
+            and u1.name like concat(concat("%",#{condition.name}),"%")
+        </if>
+        <if test="condition.number != null and condition.number != ''">
+            and u1.cellphone like concat(concat("%",#{condition.number}),"%")
+        </if>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete
         from student_volunteer

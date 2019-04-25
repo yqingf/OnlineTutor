@@ -1,8 +1,11 @@
 package com.aylfq5.online.tutor.controller;
 
+import com.aylfq5.online.tutor.domain.Condition;
 import com.aylfq5.online.tutor.domain.Role;
 import com.aylfq5.online.tutor.domain.User;
+import com.aylfq5.online.tutor.entity.DoubleSelectedResult;
 import com.aylfq5.online.tutor.service.RoleService;
+import com.aylfq5.online.tutor.service.StudentVolunteerService;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import com.aylfq5.online.tutor.util.Operation;
@@ -27,7 +30,8 @@ public class AdminController {
     private UserService userService;
     @Resource
     private RoleService roleService;
-
+    @Resource
+    private StudentVolunteerService studentVolunteerService;
 
     @Operation("后台首页")
     @RequestMapping("index.html")
@@ -55,5 +59,25 @@ public class AdminController {
         model.addAttribute("roleList", roleList);
         model.addAttribute("result", result.getData());
         return "/student/edit";
+    }
+
+    /**
+     * 双选结果页面
+     * @return
+     */
+    @GetMapping("/list.html")
+    public String toDoubleSelectionResult() {
+        return "/admin/list";
+    }
+
+    /**
+     * 双选结果
+     * @return
+     */
+    @GetMapping("/double/selected/result")
+    @ResponseBody
+    public OnlineTutorResult getDoubleSelectionResult(Condition condition) {
+        OnlineTutorResult result = studentVolunteerService.getDoubleSelectionResult(condition);
+        return result;
     }
 }

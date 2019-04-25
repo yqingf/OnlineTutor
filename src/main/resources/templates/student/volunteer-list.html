@@ -31,8 +31,7 @@
 </div>
 <script>
     var pageCurr;
-    layui.use(['laydate', 'table', 'form'], function () {
-        var form = layui.form;
+    layui.use(['laydate', 'table'], function () {
         var table = layui.table;
         var laydate = layui.laydate;
         //执行一个laydate实例
@@ -43,7 +42,7 @@
         laydate.render({
             elem: '#end' //指定元素
         });
-        tableIns = table.render({
+        table.render({
             elem: '#tutor-table',
             url: '[[@{/student/volunteer/list}]]',
             method: 'GET',
@@ -52,12 +51,12 @@
             toolbar: true,
             cols: [
                 [
-                    {field: 'id', title: 'ID', hide:true},
-                    {field: 'name', title: '导师姓名', event: 'nameClick', style:'cursor: pointer;'},
-                    {field: 'cellphone', title: '电话', sort: true},
-                    {field: 'email', title: '邮箱', sort: true},
+                    {field: 'id', title: 'ID', hide: true},
+                    {field: 'name', title: '导师姓名', event: 'nameClick', style: 'cursor: pointer;'},
+                    {field: 'cellphone', title: '电话'},
+                    {field: 'email', title: '邮箱'},
                     {field: 'volunteerSequences', title: '志愿序列', sort: true},
-                    {field: 'status', title: '志愿状态', sort: true, templet: '#volunteerStatusTpl'}
+                    {field: 'status', title: '志愿状态', templet: '#volunteerStatusTpl'}
                 ]
             ],
             response: {
@@ -65,7 +64,7 @@
                 statusCode: 200, //规定成功的状态码，默认：0
                 msgName: 'msg', //规定状态信息的字段名称，默认：msg
                 countName: 'count', //规定数据总数的字段名称，默认：count
-                dataName: 'data', //规定数据列表的字段名称，默认：data
+                dataName: 'data' //规定数据列表的字段名称，默认：data
             }
         });
     });

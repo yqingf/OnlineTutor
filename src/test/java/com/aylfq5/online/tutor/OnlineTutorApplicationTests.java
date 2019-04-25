@@ -11,6 +11,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Random;
 
 
@@ -22,7 +25,19 @@ public class OnlineTutorApplicationTests {
     private ApplicationContext context;
 
     @Resource
+    private DataSource dataSource;
+
+    @Resource
     private UserMapper userMapper;
+
+
+    @Test
+    public void contextLoads() throws SQLException {
+        System.out.println(dataSource.getClass());
+        Connection connection = dataSource.getConnection();
+        System.out.println("*******************"+connection);
+        connection.close();
+    }
 
     @Test
     public void insert() {

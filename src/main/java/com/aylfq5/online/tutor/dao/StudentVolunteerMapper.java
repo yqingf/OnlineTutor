@@ -1,7 +1,9 @@
 package com.aylfq5.online.tutor.dao;
 
+import com.aylfq5.online.tutor.domain.Condition;
 import com.aylfq5.online.tutor.domain.StudentVolunteer;
 import com.aylfq5.online.tutor.domain.User;
+import com.aylfq5.online.tutor.entity.DoubleSelectedResult;
 import com.aylfq5.online.tutor.entity.VolunteerDTO;
 import org.apache.ibatis.annotations.Param;
 
@@ -37,4 +39,10 @@ public interface StudentVolunteerMapper {
     int updateByPrimaryKeyVersionSelective(StudentVolunteer studentVolunteer);
 
     List<User> getAgreeByTutorId(Long tutorId);
+
+    /**
+     * 查询双选结果
+     * @return
+     */
+    List<DoubleSelectedResult> getDoubleSelectionResult(@Param("condition") Condition condition);
 }

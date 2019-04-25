@@ -16,16 +16,18 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <input type="text" id="name" name="name" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+            <input id="number" type="text" name="number" placeholder="学号" autocomplete="off" class="layui-input">
+            <div class="layui-input-inline">
+                <select name="status" id="status">
+                    <option value="">状态</option>
+                    <option value="0">启用</option>
+                    <option value="1">停用</option>
+                </select>
+            </div>
+            <button id="search" type="button" class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <xblock>
-
-        </button>
-    </xblock>
 </div>
 <table class="layui-table" lay-filter="volunteer-list" id="tutor-table"></table>
 </div>
@@ -136,13 +138,13 @@
                     layer.msg(res.msg, {
                         icon: 6,
                         time: 2000
-                    })
+                    });
                     location.reload(true);
                 } else {
                     layer.msg(res.msg, {
                         icon: 5,
                         time: 2000
-                    })
+                    });
                 }
             }
         });

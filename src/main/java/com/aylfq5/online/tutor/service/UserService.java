@@ -42,4 +42,5 @@ public interface UserService {
     OnlineTutorResult updateStatus(User user);
 
     OnlineTutorResult updatePassword(UserDTO userDTO);
+
 }
