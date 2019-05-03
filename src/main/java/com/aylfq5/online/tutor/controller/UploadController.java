@@ -1,5 +1,6 @@
 package com.aylfq5.online.tutor.controller;
 
+import com.aylfq5.online.tutor.util.FastDFSClient;
 import com.aylfq5.online.tutor.util.JsonUtils;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import com.google.gson.Gson;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -44,6 +47,9 @@ public class UploadController {
     private String bucket;
     @Value("${qiniu.source-prefix}")
     private String prefix;
+
+    @Value("${IMAGE_SERVER_URL}")
+    private String IMAGE_SERVER_URL;
 
     /**
      * 文件上传
@@ -106,4 +112,32 @@ public class UploadController {
         }
         return OnlineTutorResult.build(400, "删除失败！");
     }
+
+
+
+    @RequestMapping("/pic/upload")
+    public OnlineTutorResult picUpload(MultipartFile file) {
+        try {
+            //接收上传的文件
+            //取扩展名
+            String originalFilename = file.getOriginalFilename();
+            String extName = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            //上传到图片服务器
+            FastDFSClient fastDFSClient = new FastDFSClient("classpath:client.conf");
+            String url = fastDFSClient.uploadFile(file.getBytes(), extName);
+            url = IMAGE_SERVER_URL + url;
+            //响应上传图片的url
+            Map result = new HashMap<>();
+            result.put("key", url);
+            return OnlineTutorResult.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map result = new HashMap<>();
+            result.put("error", 1);
+            result.put("message", "图片上传失败");
+            return OnlineTutorResult.error();
+        }
+
+    }
+
 }

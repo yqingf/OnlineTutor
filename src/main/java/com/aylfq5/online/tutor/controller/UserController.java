@@ -5,10 +5,8 @@ import com.aylfq5.online.tutor.entity.UserDTO;
 import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

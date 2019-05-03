@@ -42,8 +42,8 @@ public class OnlineTutorApplicationTests {
     @Test
     public void insert() {
         User user = new User();
-        long cellphone = 18855733012L;
-        for (int i = 1; i <= 1000; i++) {
+        long cellphone = 18855734012L;
+        for (int i = 1; i <= 500; i++) {
             user.setId(IDUtils.genItemId());
             user.setName("张三" + i);
             user.setPassword(String.valueOf(IDUtils.genItemId()));
@@ -57,13 +57,13 @@ public class OnlineTutorApplicationTests {
             if (i % 2 == 0) {
                 user.setUserType(2);
                 user.setProfessionalTitle("助教");
-                if (user.getUserType() == 1 && i % 2 == 0) {
+                if (i % 2 == 0) {
                     user.setProfessionalTitle("讲师");
                 }
-                if (user.getUserType() == 1 && i % 3 == 0) {
+                if (i % 3 == 0) {
                     user.setProfessionalTitle("副教授");
                 }
-                if (user.getUserType() == 1 && i % 4 == 0) {
+                if (i % 4 == 0) {
                     user.setProfessionalTitle("教授");
                 }
             }

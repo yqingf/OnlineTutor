@@ -46,3 +46,5 @@ qiniu:
   secretkey: 73xQTIe5pXUQeeUnU_kbYkPv9gC2iAuwFYQeVh7H
   bucket: aylfq5_online_tutor
   source-prefix: http://porbzia1c.bkt.clouddn.com/
+
+IMAGE_SERVER_URL: http://192.168.25.11
