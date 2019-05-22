@@ -7,9 +7,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource                           # 配置当前要使用的数据源的操作类型
     driver-class-name: com.mysql.jdbc.Driver                            # 配置MySQL的驱动程序类
-    url: jdbc:mysql://47.103.50.117:3306/onlinetutor?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8    # 数据库连接地址
-    username: yqingf                                                         # 数据库用户名
-    password: aylfq5                                                          # 数据库连接密码
+    url: jdbc:mysql://localhost:3306/onlinetutor?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8    # 数据库连接地址
+    username: root                                                         # 数据库用户名
+    password: 1234                                                          # 数据库连接密码
     initialSize: 5                                                             # 初始化提供的连接数
     minIdle: 5                                                          # 数据库连接池的最小维持连接数
     maxActive: 20                                                       # 最大的连接数
@@ -47,4 +47,4 @@ qiniu:
   bucket: aylfq5_online_tutor
   source-prefix: http://porbzia1c.bkt.clouddn.com/
 
-IMAGE_SERVER_URL: http://192.168.25.11
+IMAGE_SERVER_URL: http://192.168.25.133/

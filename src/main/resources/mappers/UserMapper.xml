@@ -272,7 +272,25 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.aylfq5.online.tutor.domain.UserExample" resultType="java.lang.Integer" >
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into user (id, name, gender,
+    avatar, number, password,
+    user_type, cellphone, qq, email,
+    personal_profile, direction, specialties,
+    tutor_expectation, professional_title, selected_numbers,
+    expected_numbers, office, achievements,
+    create_time, update_time) values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.gender,jdbcType=BIT},
+      #{item.avatar,jdbcType=VARCHAR}, #{item.number,jdbcType=CHAR}, #{item.password,jdbcType=VARCHAR},
+      #{item.userType,jdbcType=BIT}, #{item.cellphone,jdbcType=CHAR}, #{item.qq,jdbcType=VARCHAR}, #{item.email,jdbcType=VARCHAR},
+      #{item.personalProfile,jdbcType=VARCHAR}, #{item.direction,jdbcType=VARCHAR}, #{item.specialties,jdbcType=VARCHAR},
+      #{item.tutorExpectation,jdbcType=VARCHAR}, #{item.professionalTitle,jdbcType=VARCHAR}, #{item.selectedNumbers,jdbcType=TINYINT},
+      #{item.expectedNumbers,jdbcType=TINYINT}, #{item.office,jdbcType=VARCHAR}, #{item.achievements,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+    <select id="countByExample" parameterType="com.aylfq5.online.tutor.domain.UserExample" resultType="java.lang.Integer" >
     select count(*) from user
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -283,6 +301,7 @@
       <include refid="Base_Column_List" />
       from user
       where user_type = #{type,jdbcType=BIGINT}
+      and status = 0
     </select>
   <select id="selectByNumber" resultMap="BaseResultMap">
     select
@@ -297,6 +316,22 @@
         where number = #{number,jdbcType=BIGINT}
         and id <![CDATA[ <> ]]> #{id, jdbcType=VARCHAR}
     </select>
+  <select id="getNoTutorStudentList" resultType="com.aylfq5.online.tutor.domain.User">
+    select
+      id,
+      number,
+      name,
+      cellphone
+    from user
+    where id not in(select
+                      u.id
+                    from user u
+                      right join student_volunteer s
+                        on u.id = s.student_id
+                    where s.volunteer_status = 3
+                    group by u.id)
+        and user_type = 1
+  </select>
   <update id="updateByExampleSelective" parameterType="map" >
     update user
     <set >

@@ -179,6 +179,14 @@
                  JOIN user_role ur ON ur.role_id = r.id
         WHERE ur.user_id = #{userId}
     </select>
+    <select id="getUserRoleId" resultType="java.lang.Long">
+        select distinct
+          ur.role_id
+        from user u
+          join user_role ur
+            on u.id = ur.user_id
+        where u.user_type = #{type}
+    </select>
     <update id="updateByExampleSelective" parameterType="map">
         update role
         <set>

@@ -2,7 +2,7 @@ package com.aylfq5.online.tutor.domain;
 
 import java.io.Serializable;
 
-public class UserRoleKey implements Serializable {
+public class UserRoleKey implements Serializable,Cloneable {
     private Long userId;
 
     private Long roleId;
@@ -23,5 +23,10 @@ public class UserRoleKey implements Serializable {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

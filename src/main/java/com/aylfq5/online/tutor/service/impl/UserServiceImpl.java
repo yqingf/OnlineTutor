@@ -1,13 +1,9 @@
 package com.aylfq5.online.tutor.service.impl;
 
-import com.alibaba.druid.sql.dialect.mysql.ast.MysqlForeignKey;
 import com.aylfq5.online.tutor.constant.ResponseMsg;
 import com.aylfq5.online.tutor.constant.ResponseStatusCode;
 import com.aylfq5.online.tutor.controller.CaptchaController;
-import com.aylfq5.online.tutor.dao.StudentInfoMapper;
-import com.aylfq5.online.tutor.dao.TutorInfoMapper;
-import com.aylfq5.online.tutor.dao.UserMapper;
-import com.aylfq5.online.tutor.dao.UserRoleMapper;
+import com.aylfq5.online.tutor.dao.*;
 import com.aylfq5.online.tutor.domain.Condition;
 import com.aylfq5.online.tutor.domain.User;
 import com.aylfq5.online.tutor.domain.UserExample;
@@ -17,6 +13,7 @@ import com.aylfq5.online.tutor.service.UserService;
 import com.aylfq5.online.tutor.util.IDUtils;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
 import com.aylfq5.online.tutor.util.Operation;
+import com.aylfq5.online.tutor.util.POIUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -26,9 +23,13 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @Description:
@@ -43,9 +44,12 @@ public class UserServiceImpl implements UserService {
     @Resource
     private TutorInfoMapper tutorInfoMapper;
     @Resource
-    private StudentInfoMapper studentInfoMapper;
+    private StudentVolunteerMapper studentVolunteerMapper;
     @Resource
     private UserRoleMapper userRoleMapper;
+    @Resource
+    private RoleMapper roleMapper;
+
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -269,5 +273,111 @@ public class UserServiceImpl implements UserService {
             return OnlineTutorResult.build(ResponseStatusCode.DATA_DAO_EXCEPTION, ResponseMsg.UPDATE_FAIL);
         }
         return OnlineTutorResult.build(ResponseStatusCode.SUCCESS, ResponseMsg.UPDATE_SUCCESS);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public OnlineTutorResult importStudent(MultipartFile file) throws CloneNotSupportedException, IOException {
+        List<User> userList = new ArrayList<>();
+        List<String[]> strings = POIUtils.readExcel(file);
+        User user = new User();
+        for (int i = 0; i < strings.size(); i++) {
+//            long id = IDUtils.genItemId();
+            IDUtils idUtils = new IDUtils(0,0);
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            String[] arr = strings.get(i);
+            User cloneUser = user.clone();
+            cloneUser.setId(idUtils.nextId());
+            cloneUser.setName(arr[1]);
+            cloneUser.setPassword("4297f44b13955235245b2497399d7a93");
+            cloneUser.setUserType(1);
+            cloneUser.setGender("男".equals(arr[2]) ? 1 : 2);
+            cloneUser.setNumber(arr[0]);
+            cloneUser.setDirection(arr[3]);
+            cloneUser.setCellphone(arr[5]);
+            cloneUser.setQq(arr[6]);
+            cloneUser.setEmail(arr[7]);
+            cloneUser.setOffice(arr[4]);
+            userList.add(cloneUser);
+        }
+        int count = userMapper.batchInsert(userList);
+        grantRole(userList, 1);
+        return OnlineTutorResult.ok(count);
+    }
+
+    private void grantRole(List<User> userList, int type) throws CloneNotSupportedException {
+        // 查询学生角色ID
+        Long roleId = roleMapper.getUserRoleId(type);
+        List<UserRoleKey> list = new ArrayList<>();
+        UserRoleKey userRoleKey = new UserRoleKey();
+        for (User user : userList) {
+            UserRoleKey clone = (UserRoleKey) userRoleKey.clone();
+            clone.setRoleId(roleId);
+            clone.setUserId(user.getId());
+            list.add(clone);
+        }
+        // 批量插入
+        userRoleMapper.batchInsert(list);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public OnlineTutorResult importTutor(MultipartFile file) throws IOException, CloneNotSupportedException {
+        List<User> userList = new ArrayList<>();
+        List<String[]> strings = POIUtils.readExcel(file);
+        User user = new User();
+        for (int i = 0; i < strings.size(); i++) {
+            long id = IDUtils.genItemId();
+            String[] arr = strings.get(i);
+            User cloneUser = user.clone();
+            cloneUser.setId(id);
+            cloneUser.setName(arr[1]);
+            cloneUser.setPassword("4297f44b13955235245b2497399d7a93");
+            cloneUser.setUserType(2);
+            cloneUser.setGender("男".equals(arr[2]) ? 1 : 2);
+            cloneUser.setProfessionalTitle(arr[3]);
+            cloneUser.setExpectedNumbers(Integer.valueOf(arr[4]));
+            cloneUser.setNumber(arr[0]);
+            cloneUser.setCellphone(arr[5]);
+            userList.add(cloneUser);
+        }
+        int count = userMapper.batchInsert(userList);
+        grantRole(userList, 2);
+        return OnlineTutorResult.ok(count);
+    }
+
+    @Override
+    public OnlineTutorResult getNoTutorStudentList(Condition condition) {
+        Integer page = condition.getPage();
+        Integer rows = condition.getRows();
+        PageHelper.startPage(page == null ? 1 : page, rows == null ? 10 : rows);
+        // 获取还未被导师选中的学生列表
+        List<User> userList = userMapper.getNoTutorStudentList();
+        if (userList.size() <= 0) {
+            return OnlineTutorResult.build(4001, "暂无数据!", 0);
+        }
+        PageInfo pageInfo = new PageInfo(userList);
+        long total = pageInfo.getTotal();
+
+        return OnlineTutorResult.build(200, "ok", (int) total, userList);
+    }
+
+    @Override
+    public synchronized OnlineTutorResult getVacancyTutor() {
+        List<User> userList = new ArrayList<>();
+        // 获取导师列表
+        List<User> tutorList = userMapper.getUserList(2);
+        for (User user : tutorList) {
+            int agreeCount = studentVolunteerMapper.getAgreeCountByTutorId(user.getId());
+            int expectedNumbers = user.getExpectedNumbers() == null ? 0 : user.getExpectedNumbers();
+            if (agreeCount < expectedNumbers) {
+                userList.add(user);
+            }
+        }
+        return OnlineTutorResult.ok(userList);
     }
 }

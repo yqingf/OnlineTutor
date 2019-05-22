@@ -12,4 +12,6 @@ public interface UserRoleMapper {
     int insertSelective(UserRoleKey record);
 
     List<UserRoleKey> selectByUserId(Long userId);
+
+    int batchInsert(List<UserRoleKey> list);
 }

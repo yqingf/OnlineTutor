@@ -41,16 +41,18 @@
                     <option value="1">停用</option>
                 </select>
             </div>
-            <button id="search" type="button" class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+            <button id="search" type="button" class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i>
+            </button>
         </form>
     </div>
 </div>
 <table class="layui-table" lay-filter="tutor-list" id="tutor-table"></table>
 </div>
 <script>
-    layui.use(['laydate', 'table', 'form'], function () {
+    layui.use(['upload', 'table', 'form'], function () {
         var table = layui.table,
             form = layui.form,
+            upload = layui.upload,
             $ = layui.$;
         var tableIns = table.render({
             elem: '#tutor-table',
@@ -68,13 +70,13 @@
             cols: [
                 [
                     {type: 'checkbox'},
-                    {field: 'id', title: 'ID'},
+                    {field: 'id', title: 'ID', hide: true},
+                    {field: 'number', title: '教师号', sort: true},
                     {field: 'name', title: '姓名', sort: true},
                     {field: 'gender', title: '性别', sort: true, templet: '#sexTpl'},
                     {field: 'professionalTitle', title: '职称'},
                     {field: 'expectedNumbers', title: '预带人数'},
-                    {field: 'number', title: '教师号', sort: true},
-                    {field: 'cellphone', title: '电话', sort: true,},
+                    {field: 'cellphone', title: '电话', sort: true},
                     {field: 'status', title: '状态', sort: true, align: 'center', templet: "#switchTpl"},
                     {fixed: 'right', title: '操作', toolbar: '#rowDemo', width: 200, align: 'center'}
                 ]
@@ -92,8 +94,13 @@
                 msgName: 'msg', //规定状态信息的字段名称，默认：msg
                 countName: 'count', //规定数据总数的字段名称，默认：count
                 dataName: 'data', //规定数据列表的字段名称，默认：data
-            },
-        })
+            }
+        });
+        var tableTool = $(".layui-table-tool-self");
+        var importDiv = $('<div class="layui-inline" title="导入" lay-event="LAYTABLE_IMPORT"></div>');
+        var i = $('<i class="layui-icon layui-icon-upload" id="user-upload"></i>');
+        importDiv.append(i);
+        tableTool.append(importDiv);
         table.on('toolbar(tutor-list)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id).data;
             switch (obj.event) {
@@ -134,7 +141,7 @@
                 });
             }
         });
-        $("#search").on("click",function() {
+        $("#search").on("click", function () {
             tableIns.reload(/*'searchReload',*/ {
                 page: {
                     curr: 1 //重新从第 1 页开始
@@ -149,6 +156,19 @@
                     status: $("#status").val()
                 }
             });
+        });
+        upload.render({
+            elem: '#user-upload', //绑定元素
+            url: '/import/tutor', //上传接口
+            accept: 'file',
+            done: function (res) {
+                //上传完毕回调
+               layer.msg('导入数据成功', {icon: 6});
+            },
+            error: function () {
+                //请求异常回调
+                layer.msg('导入数据失败', {icon: 5});
+            }
         });
     });
 </script>

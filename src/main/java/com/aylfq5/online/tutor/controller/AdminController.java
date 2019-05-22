@@ -80,4 +80,46 @@ public class AdminController {
         OnlineTutorResult result = studentVolunteerService.getDoubleSelectionResult(condition);
         return result;
     }
+
+    /**
+     * 指派导师页面
+     * @return
+     */
+    @GetMapping("/assign/tutor.html")
+    public String assignTutor() {
+        return "/admin/assign-tutor";
+    }
+
+    /**
+     * 没有被老师录取的学生列表
+     * @param condition
+     * @return
+     */
+    @GetMapping("/assign/tutor")
+    @ResponseBody
+    public OnlineTutorResult getNoTutorStudentList(Condition condition) {
+        OnlineTutorResult result = userService.getNoTutorStudentList(condition);
+        return result;
+    }
+
+    /**
+     * 指派
+     * @return
+     */
+    @GetMapping("/assign")
+    @ResponseBody
+    public OnlineTutorResult assignTutor(Long studentId, Long tutorId) {
+        OnlineTutorResult result = studentVolunteerService.assignTutor(studentId, tutorId);
+        return result;
+    }
+    /**
+     *
+     * @return
+     */
+    @GetMapping("/vacancy/tutor")
+    @ResponseBody
+    public OnlineTutorResult getVacancyTutor() {
+        OnlineTutorResult result = userService.getVacancyTutor();
+        return result;
+    }
 }

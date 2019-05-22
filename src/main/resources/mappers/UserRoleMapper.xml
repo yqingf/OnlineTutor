@@ -36,4 +36,10 @@
       </if>
     </trim>
   </insert>
+  <insert id="batchInsert">
+    insert into user_role (role_id, user_id) values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.roleId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
 </mapper>

@@ -4,7 +4,9 @@ import com.aylfq5.online.tutor.domain.Condition;
 import com.aylfq5.online.tutor.domain.User;
 import com.aylfq5.online.tutor.entity.UserDTO;
 import com.aylfq5.online.tutor.util.OnlineTutorResult;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,4 +45,11 @@ public interface UserService {
 
     OnlineTutorResult updatePassword(UserDTO userDTO);
 
+    OnlineTutorResult importStudent(MultipartFile file) throws CloneNotSupportedException, IOException;
+
+    OnlineTutorResult importTutor(MultipartFile file) throws IOException, CloneNotSupportedException;
+
+    OnlineTutorResult getNoTutorStudentList(Condition condition);
+
+    OnlineTutorResult getVacancyTutor();
 }

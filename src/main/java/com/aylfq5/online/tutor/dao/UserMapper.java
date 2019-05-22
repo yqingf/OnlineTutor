@@ -36,4 +36,7 @@ public interface UserMapper {
 
     int deleteBatch(@Param("ids") String ids);
 
+    int batchInsert(List<User> list);
+
+    List<User> getNoTutorStudentList();
 }

@@ -34,22 +34,15 @@
 <table class="layui-table" lay-filter="student-list" id="student-table"></table>
 </div>
 <script>
-    layui.use(['laydate', 'table','form'], function () {
-        var table = layui.table;
-        var form = layui.form;
-        var laydate = layui.laydate;
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
-        });
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
-        });
+    layui.use(['table','upload'], function () {
+        var table = layui.table,
+            upload = layui.upload,
+            $ = layui.$;
         table.render({
             elem: '#student-table',
             url: '[[@{/student/list}]]',
             method: 'GET',
+            async: false,
             page: {theme: '#009688'},
             limit: 10,
             limits: [10, 20, 30, 50, 100],
@@ -61,13 +54,13 @@
             cols: [
                 [
                     {type: 'checkbox'},
-                    {field: 'id', title: 'ID',  sort: true, hide: true},
+                    {field: 'id', title: 'ID', hide: true},
+                    {field: 'number', title: '学号', sort: true},
                     {field: 'name', title: '姓名',  sort: true},
                     {field: 'gender', title: '性别',  sort: true, templet: '#sexTpl'},
-                    {field: 'number', title: '学号', sort: true},
-                    {field: 'cellphone', title: '电话', sort: true,},
                     {field: 'direction', title: '专业', sort: true},
                     {field: 'office', title: '班级', sort: true},
+                    {field: 'cellphone', title: '电话', sort: true},
                     {fixed: 'right', title: '操作', toolbar: '#rowDemo', width: 200, align: 'center'}
                 ]
             ],
@@ -84,8 +77,13 @@
                 msgName: 'msg', //规定状态信息的字段名称，默认：msg
                 countName: 'count', //规定数据总数的字段名称，默认：count
                 dataName: 'data', //规定数据列表的字段名称，默认：data
-            },
-        })
+            }
+        });
+        var tableTool = $(".layui-table-tool-self");
+        var importDiv = $('<div class="layui-inline" title="导入" lay-event="LAYTABLE_IMPORT"></div>');
+        var i = $('<i class="layui-icon layui-icon-upload" id="user-upload"></i>');
+        importDiv.append(i);
+        tableTool.append(importDiv);
         table.on('toolbar(student-list)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id).data;
             switch (obj.event) {
@@ -136,6 +134,19 @@
                     direction: $("#direction").val()
                 }
             });
+        });
+        upload.render({
+            elem: '#user-upload', //绑定元素
+            url: '/import/student', //上传接口
+            accept: 'file',
+            done: function (res) {
+                //上传完毕回调
+                layer.msg('数据导入成功！', {icon: 6});
+            },
+            error: function () {
+                //请求异常回调
+                layer.msg('数据导入失败', {icon: 5});
+            }
         });
     });
 </script>

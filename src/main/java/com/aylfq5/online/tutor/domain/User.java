@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class User implements Serializable {
+public class User implements Serializable, Cloneable {
     /**主键*/
     private Long id;
     /**姓名*/
@@ -270,5 +270,17 @@ public class User implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public User clone() {
+        Object obj = null;
+        try {
+            obj = super.clone();
+            return (User) obj;
+        } catch (CloneNotSupportedException e) {
+
+        }
+        return null;
     }
 }
